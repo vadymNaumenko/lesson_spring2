@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="#1" author="Vadym">
+        <createTable tableName="person">
+            <column name="person_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="username" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="city" type="varchar(100)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="#2" author="Vadym">
+        <createTable tableName="city">
+            <column name="city_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)"/>
+        </createTable>
+        <sql>INSERT INTO city (name) SELECT DISTINCT e.city FROM person e</sql>
+        <addColumn tableName="person">
+            <column name="city_id" type="int"/>
+        </addColumn>
+        <sql>UPDATE person SET city_id = sq.city_id FROM (SELECT * FROM city) AS sq WHERE person.city = sq.name</sql>
+        <dropColumn tableName="person" columnName="city"/>
+        <addForeignKeyConstraint baseTableName="person" baseColumnNames="city_id"
+                                 constraintName="fk_event_city" referencedTableName="city"
+                                 referencedColumnNames="city_id"/>
+    </changeSet>
+
+</databaseChangeLog>
