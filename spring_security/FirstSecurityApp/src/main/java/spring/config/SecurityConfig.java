@@ -3,6 +3,7 @@ package spring.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
@@ -18,6 +19,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(personDetailsService);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/auth/login","/error").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .formLogin().loginPage("/auth/login")
+                .loginProcessingUrl("/url/with/form") // this form for spring security
+                .defaultSuccessUrl("/hello",true) // if user is contains security redirect to page hallo
+                .failureUrl("/auth/login?error");      // else redirect /auth/login?error with error
     }
 
     @Bean
