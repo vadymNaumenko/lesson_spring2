@@ -23,12 +23,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        http.csrf().disable()
+                .authorizeRequests()
                 .antMatchers("/auth/login","/error").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/auth/login")
-                .loginProcessingUrl("/url/with/form") // this form for spring security
+                .loginProcessingUrl("/forms") // this form for spring security
                 .defaultSuccessUrl("/hello",true) // if user is contains security redirect to page hallo
                 .failureUrl("/auth/login?error");      // else redirect /auth/login?error with error
     }

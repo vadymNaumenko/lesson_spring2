@@ -5,17 +5,18 @@
     <title>Title</title>
 </head>
 <body>
-<form method="post" action="/url/with/form">
+<form name="f" method="post" action="/forms">
     <div class="mb-3">
-        <label for="exampleInputEmail1" class="form-label">Username</label>
-        <input name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <label for="username" >Username</label>
+        <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp">
         <div id="emailHelp" class="form-text">We'll never share your username with anyone else.</div>
     </div>
     <div class="mb-3">
-        <label for="exampleInputPassword1" class="form-label">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1">
+        <label for="password" >Password</label>
+        <input name="password" type="password" class="form-control" id="password">
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <div th:if="${param.error}" style="color: red"> not found password or username</div>
+    <input type="submit" value="login">
 </form>
 </body>
 </html>
