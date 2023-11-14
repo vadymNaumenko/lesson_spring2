@@ -6,6 +6,7 @@
 </head>
 <body>
 <form name="f" method="post" action="/login/forms">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <div class="mb-3">
         <label for="username" >Username</label>
         <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp">

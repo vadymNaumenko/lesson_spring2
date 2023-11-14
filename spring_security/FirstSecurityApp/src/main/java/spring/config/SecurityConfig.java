@@ -24,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http
                 .authorizeRequests()
                 .antMatchers("/auth/login","/auth/registration","/error").permitAll() // or "/auth/**"
                 .anyRequest().authenticated()
@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/hello",true) // if user is contains security redirect to page hallo
                 .failureUrl("/auth/login?error") // else redirect /auth/login?error with error
                 .and()
-                .logout().logoutUrl("/logout") //href "/logout"
+                .logout().logoutUrl("/logout") //href "/logout" method post in form
                 .logoutSuccessUrl("/auth/login");
     }
 
