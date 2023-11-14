@@ -29,9 +29,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/auth/login")
-                .loginProcessingUrl("/forms") // this form for spring security
+                .loginProcessingUrl("/login/forms") // this form for spring security
                 .defaultSuccessUrl("/hello",true) // if user is contains security redirect to page hallo
-                .failureUrl("/auth/login?error");      // else redirect /auth/login?error with error
+                .failureUrl("/auth/login?error") // else redirect /auth/login?error with error
+                .and()
+                .logout().logoutUrl("/logout") //href "/logout"
+                .logoutSuccessUrl("/auth/login");
     }
 
     @Bean
