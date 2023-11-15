@@ -21,6 +21,9 @@ public class Person {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "role", nullable = false)
+    private String role;
+
     public Person(String username, Integer yearOfBirth) {
         this.username = username;
         this.yearOfBirth = yearOfBirth;
