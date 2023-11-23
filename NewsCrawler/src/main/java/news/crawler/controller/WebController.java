@@ -1,6 +1,7 @@
 package news.crawler.controller;
 
 import news.crawler.controller.dto.EventDTO;
+import news.crawler.domin.SourceConfig;
 import news.crawler.service.WebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,24 +24,12 @@ public class WebController {
         return webService.getEvents(url);
     }
 
-    @GetMapping("/events/2")
-    public List<EventDTO> getEvents2() throws IOException {
+
+    @GetMapping("/events/5")
+    public List<EventDTO> getEvents5() throws IOException {
         String url = "https://it.novyny.live/ru/news/";
 
-        return webService.getEvents2(url);
+        return webService.getEvents5(url);
     }
-    @GetMapping("/events/3")
-    public List<EventDTO> getEvents3() throws IOException {
-        String url = "https://it.novyny.live/ru/news/";
-
-        return webService.getEvents3(url);
-    }
-    @GetMapping("/events/4")
-    public List<EventDTO> getEvents4() throws IOException {
-        String url = "https://it.novyny.live/ru/news/";
-
-        return webService.getEvents4(url);
-    }
-
 
 }

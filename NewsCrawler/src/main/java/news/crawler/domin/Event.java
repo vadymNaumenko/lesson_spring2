@@ -1,11 +1,41 @@
 package news.crawler.domin;
 
+import lombok.*;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "events")
 public class Event {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "event_id")
     private Integer id;
-    private String newsUrl;
+
+    @ManyToOne
+    @JoinColumn(name = "source_config_id")
+    private SourceConfig sourceConfig;
+
     private String title;
-    private OffsetDateTime dateTime;
+    private String newsUrl;
+    //    private OffsetDateTime dateTime;
+    private LocalDateTime dateTime;
+    private String imageUrl;
     private String text;
+
+    public Event(SourceConfig sourceConfig, String title, String newsUrl, LocalDateTime dateTime, String imageUrl, String text) {
+        this.sourceConfig = sourceConfig;
+        this.title = title;
+        this.newsUrl = newsUrl;
+        this.dateTime = dateTime;
+        this.imageUrl = imageUrl;
+        this.text = text;
+    }
 }

@@ -1,7 +1,8 @@
 package news.crawler.service;
 
 import news.crawler.controller.dto.EventDTO;
-import news.crawler.domin.SourceConfig;
+import news.crawler.domin.SourceConfig2;
+import org.apache.commons.lang3.time.DateUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,46 +10,43 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class WebService {
 
-    SourceConfig sourceConfig = new SourceConfig();
+    SourceConfig2 sourceConfig = new SourceConfig2();
 
-    public List<EventDTO> getEvents(String Sourceurl) throws IOException {
+    public List<EventDTO> getEvents(String sourceurl) throws IOException {
         List<EventDTO> events = new ArrayList<>();
 
-        Document doc = Jsoup.connect(Sourceurl).get();
-        Elements links = doc.select("h2");
+        // ?PAGEN_1=1&IBLOCK_CODE=news
 
-        for (Element element : links) {
-            String title = element.text();
-            String url = element.select("a").attr("href");
-            events.add(new EventDTO(title, url));
-        }
+        String nextPage = "?PAGEN_1=1&IBLOCK_CODE=news";
+
+        String[] sFirst = nextPage.split("=");
+        String[] sLast = nextPage.split("&");
 
 
-        return events;
-    }
+        for (int i = 1; i < 4; i++) {
 
-    //TODO basic title and href from sit .ua
-    public List<EventDTO> getEvents2(String sourceurl) throws IOException {
-        List<EventDTO> events = new ArrayList<>();
+            String newPage2 = sFirst[0] + "=" + i + "&" + sLast[1];
+            String pageSourceUrl = sourceurl + newPage2;
 
+            Document doc = Jsoup.connect(pageSourceUrl).get();
+            Elements links = doc.select("h2");
 
-        for (int i = 1; i < 2; i++) {
-            String sourceWithPage = sourceurl + "?page=" + i;
-            Document doc = Jsoup.connect(sourceWithPage).get();
-            Elements links = doc.select(".all-news__list a");
-
-            for (Element e : links) {
-                String url = e.attr("href");
-                String title = e.select("span h3").text();
-                if (!title.isEmpty()) {
-                    events.add(new EventDTO(title, url));
-                }
+            for (Element element : links) {
+                String title = element.text();
+                String url = element.select("a").attr("href");
+                //events.add(new EventDTO(title, url));
             }
 
         }
@@ -57,68 +55,175 @@ public class WebService {
         return events;
     }
 
-    //TODO param from SourceConfig
-    public List<EventDTO> getEvents3(String sourceurl) throws IOException {
+
+    //TODO with fullText and with photo
+    public List<EventDTO> getEvents5(String sourceurl) throws IOException {
         List<EventDTO> events = new ArrayList<>();
 
-        sourceConfig.setSourceUrl(sourceurl);
-        sourceConfig.setNextPage("?page=");
-        sourceConfig.setTagForHref(".all-news__list a");  // or setTagsToList();  // add priority 1
-        sourceConfig.setTagForTitle("span h3");           // add priority 2
+        Document doc = Jsoup.connect(sourceurl).get();
+        Elements links = doc.select(".all-news__list a");
 
-        for (int i = 1; ; i++) {
+        for (Element e : links) {
+            String url = e.attr("href");
+            String title = e.select("span h3").text();
+            if (!title.isEmpty()) {
+                Document page = Jsoup.connect(url).get();
+                Elements elementsWithText = page.select(".content__wrapp p");
+                String dateTime = page.select(".content__info-create").text();
+                String photo = page.select(".content__main-image img").attr("src");
 
-            String sourceWithPage = sourceConfig.getSourceUrl() + sourceConfig.getNextPage() + i;
-            Document doc = Jsoup.connect(sourceurl).get();
-            Elements links = doc.select(sourceConfig.getTagForHref());  // or getTagsToList()
+                List<String> fullText = new ArrayList<>(); // StringBuilder
 
-
-            for (Element e : links) {
-                String url = e.attr("href");
-                String title = e.select(sourceConfig.getTagForTitle()).text();
-                if (!title.isEmpty()) {
-                    events.add(new EventDTO(title, url));
+                for (Element par : elementsWithText) {
+                    fullText.add(par.text());
                 }
-            }
-            if (i == 3) break;
-        }
 
+//                events.add(new EventDTO(title, url, fullText, photo, parseFromNovyny(dateTime)));
+
+            }
+        }
 
         return events;
     }
-
-    //TODO with fullText
-    public List<EventDTO> getEvents4(String sourceurl) throws IOException {
-        List<EventDTO> events = new ArrayList<>();
+    private LocalDateTime parseFromNovyny(String dateTime) {
 
 
-        for (int i = 1; i < 2; i++) {
-            String sourceWithPage = sourceurl + "?page=" + i;
-            Document doc = Jsoup.connect(sourceWithPage).get();
-            Elements links = doc.select(".all-news__list a");
+        String[] paterns = {"dd MM yyyy HH:mm","d MM yyyy HH:mm"};
 
-            for (Element e : links) {
-                String url = e.attr("href");
-                String title = e.select("span h3").text();
-                if (!title.isEmpty()) {
-                    Document page = Jsoup.connect(url).get();
-                    Elements elementsWithText = page.select(".content__wrapp p");
+        try {
+            Date date =  DateUtils.parseDate("21 11 2023 13:56",paterns);
 
-                    List<String> fullText = new ArrayList<>();
+            Instant instant = date.toInstant();
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+            System.out.println(localDateTime);
 
-                    for (Element par : elementsWithText) {
-                        fullText.add(par.text());
-                    }
+            Date date2 =  DateUtils.parseDate("1 11 2023 13:56",paterns);
 
-                    events.add(new EventDTO(title, url, fullText)); // list while tag <p>
-                }
+            System.out.println(date2);
+
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        //////////////////////////////////////
+
+        String[] arr = dateTime.split(" ");
+        if (arr[0].length() == 1) {
+            arr[0] = "0" + arr[0];
+        }
+
+        char a = arr[1].toLowerCase().charAt(0);
+
+
+        if((int)a >= 97 && (int)a <= 122){
+
+            // english or other switch
+            
+        } else if (a == 'а'||a == 'ф'||a == 'м'||a == 'и'||a == 'с'||a == 'о'||a == 'н'||a == 'д') {
+            switch (arr[1].toLowerCase()) {
+                case "января":
+                    arr[1] = "01";
+                    break;
+                case "февраля":
+                    arr[1] = "02";
+                    break;
+                case "марта":
+                    arr[1] = "03";
+                    break;
+                case "апреля":
+                    arr[1] = "04";
+                    break;
+                case "майя":
+                    arr[1] = "05";
+                    break;
+                case "июня":
+                    arr[1] = "06";
+                    break;
+                case "июля":
+                    arr[1] = "07";
+                    break;
+                case "августа":
+                    arr[1] = "08";
+                    break;
+                case "сентября":
+                    arr[1] = "09";
+                    break;
+                case "октября":
+                    arr[1] = "10";
+                    break;
+                case "ноября":
+                    arr[1] = "11";
+                    break;
+                case "декабря":
+                    arr[1] = "12";
+                    break;
+                default:
+                    return LocalDateTime.now();
             }
-
-
         }
 
 
-        return events;
+        return LocalDateTime.parse(String.join(" ", arr), DateTimeFormatter.ofPattern("dd MM yyyy HH:mm"));
     }
+
+//    //TODO Automatic
+//    public List<EventDTO> setEventsAuto(SourceConfig sourceConfig) throws IOException {
+//        List<EventDTO> events = new ArrayList<>();
+//
+//        sourceConfig.setSourceUrl("https://news.liga.net/ua");
+//
+//        sourceConfig.setPathToTitle(".news-nth-title:not(.news-nth-title-category news-mobile-time) "); // title
+//
+//        Document doc = Jsoup.connect(sourceConfig.getSourceUrl()).get();
+//
+//        scanTitle(sourceConfig.getPathToTitle(), doc, events);
+//
+//        sourceConfig.setPathToHrefForPage(".news-nth-title a"); //href
+//
+////        String sourceurl = sourceConfig.getSourceUrl();
+//
+//
+////            Elements links = doc.select(".all-news__list a");
+////
+////            for (Element e : links) {
+////                String url = e.attr("href");
+////                String title = e.select("span h3").text();
+////                if (!title.isEmpty()) {
+////                    Document page = Jsoup.connect(url).get();
+////                    Elements elementsWithText = page.select(".content__wrapp p");
+////
+////                    String photo = page.select(".content__main-image img").attr("src");
+////                    System.out.println(photo);
+////
+////                    List<String> fullText = new ArrayList<>();
+////
+////                    for (Element par : elementsWithText) {
+////                        fullText.add(par.text());
+////                    }
+////
+////                    events.add(new EventDTO(title, url, fullText,photo));
+////                }
+////            }
+//
+//
+//        return events;
+//    }
+
+
+    public void scanFullText(String path, List<EventDTO> events) {
+
+    }
+
+    public void scanTitle(String path, Document doc, List<EventDTO> events) {
+        List<String> strs = new ArrayList<>();
+        Elements links = doc.select(path); // ".news-nth-title a"
+        for (int i = 0; i < links.size(); i++) {
+
+            strs.add(links.get(i).text());
+        }
+        System.out.println(strs);
+        System.out.println("d");
+    }
+
 
 }
