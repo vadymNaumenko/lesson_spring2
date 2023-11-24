@@ -48,7 +48,7 @@ public class CrawlerExecutor implements SmartLifecycle {
                 }
                 try {
 
-                    lock.wait(1000 * 5);
+                    lock.wait(1000 * 10);
                 } catch (InterruptedException e) {
                     log.error(e.getMessage());
                     break;
@@ -82,7 +82,7 @@ public class CrawlerExecutor implements SmartLifecycle {
             lock.notifyAll();
             while (status != ThreadStatus.STOPPED) {
                 try {
-                    lock.wait(1000);
+                    lock.wait(1000 * 10);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

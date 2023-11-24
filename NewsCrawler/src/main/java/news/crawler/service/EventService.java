@@ -19,21 +19,23 @@ public class EventService {
     @Autowired
     private EventRepository eventRepository;
 
-    public void save(List<EventDTO> events, SourceConfig config){
+    public void save(List<EventDTO> events, SourceConfig config) {
         List<EventDTO> eventDTOS = new ArrayList<>();
 
         for (int i = 0; i < events.size(); i++) {
-//            if (!eventRepository.findByTitleIs(events.get(i).getTitle())){
+
+            if (!eventRepository.existsByTitle(events.get(i).getTitle()))
                 eventDTOS.add(events.get(i));
-//            }
-            System.out.println("ss");
+
         }
 
         eventRepository.saveAll(eventDTOS.stream()
                 .map(MapperToEvent::mapToEvent)
-                .map(event -> {event.setSourceConfig(config);
-                    return event;}).collect(Collectors.toList())) ;
-        log.info("{} events save succesfull",events);
+                .map(event -> {
+                    event.setSourceConfig(config);
+                    return event;
+                }).collect(Collectors.toList()));
+        log.info("{} events save succesfull", eventDTOS.size());
 
     }
 

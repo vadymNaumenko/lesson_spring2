@@ -6,9 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EventRepository extends JpaRepository<Event,Integer> {
-    boolean findByTitleIs(String title);
+    boolean existsByTitle(String title);
 }
-    //    boolean isByNewsUrl(String url);
-
-
-//    List<Event> findTop3();
