@@ -1,6 +1,6 @@
 package news.crawler.repository;
 
-import news.crawler.domin.SourceConfig;
+import news.crawler.domain.SourceConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

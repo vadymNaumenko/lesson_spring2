@@ -1,8 +1,8 @@
-package news.crawler.service.executer;
+package news.crawler.service.executor;
 
 import lombok.extern.slf4j.Slf4j;
 import news.crawler.controller.dto.EventDTO;
-import news.crawler.domin.SourceConfig;
+import news.crawler.domain.SourceConfig;
 import news.crawler.repository.SourceConfigRepository;
 import news.crawler.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,20 +30,22 @@ public class CrawlerExecutor implements SmartLifecycle {
 
     public void run() {
         synchronized (lock) {
-            while (status == ThreadStatus.RUNNING) {
 
+            while (status == ThreadStatus.RUNNING) {
                 List<SourceConfig> configs = sourceConfigRepository.findAll();
                 for (SourceConfig config : configs) {
-                    try {
-                        Class<?> cls = Class.forName(config.getClassName());
-                        Constructor<?> constructor = cls.getConstructor();
-                        Execute execClass = (Execute) constructor.newInstance();
-                        List<EventDTO> events = execClass.execute(config);
-                        log.info("Read {} events from {}",events.size(),config.getRootUrl());
-                        //save to database
-                        eventService.save(events,config);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                    if (config.getDisabled() == null || !config.getDisabled()) {
+                        try {
+                            Class<?> cls = Class.forName(config.getClassName());
+                            Constructor<?> constructor = cls.getConstructor();
+                            Execute execClass = (Execute) constructor.newInstance();
+                            List<EventDTO> events = execClass.execute(config);
+                            log.info("Read {} events from {}", events.size(), config.getRootUrl());
+                            //save to database
+                            eventService.save(events, config);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
                 try {

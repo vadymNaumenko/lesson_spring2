@@ -1,4 +1,4 @@
-package news.crawler.domin;
+package news.crawler.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,5 +25,10 @@ public class SourceConfig {
     private Boolean disabled;
 
 
-
+    public SourceConfig(String rootUrl, String newsSuffix, String className, Boolean disabled) {
+        this.rootUrl = rootUrl;
+        this.newsSuffix = newsSuffix;
+        ClassName = className;
+        this.disabled = disabled;
+    }
 }

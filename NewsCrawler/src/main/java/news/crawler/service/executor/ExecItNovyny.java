@@ -1,9 +1,9 @@
-package news.crawler.service.executer;
+package news.crawler.service.executor;
 
 import lombok.extern.slf4j.Slf4j;
 import news.crawler.common.DateTimeUtils;
 import news.crawler.controller.dto.EventDTO;
-import news.crawler.domin.SourceConfig;
+import news.crawler.domain.SourceConfig;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;

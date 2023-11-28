@@ -1,10 +1,9 @@
-package news.crawler.service.executer;
+package news.crawler.service.executor;
 
 import lombok.extern.slf4j.Slf4j;
 import news.crawler.common.DateTimeUtils;
 import news.crawler.controller.dto.EventDTO;
-import news.crawler.domin.SourceConfig;
-import org.jsoup.Jsoup;
+import news.crawler.domain.SourceConfig;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -23,18 +22,10 @@ public class ExecItWorld implements Execute {
     @Override
     public List<EventDTO> execute(SourceConfig config) {
         List<EventDTO> events = new ArrayList<>();
-        Document document = null;
 
         try {
-            document = connect(config.getRootUrl() + config.getNewsSuffix()).timeout(20000*10).get();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            Document document = connect(config.getRootUrl() + config.getNewsSuffix()).timeout(20000 * 10).get();
 
-
-        try {
-
-//            System.out.println("D");
             Elements links = document.getElementsByClass("news-time");
             for (Element element : links) {
 
@@ -43,18 +34,12 @@ public class ExecItWorld implements Execute {
                 String newsUrl = config.getRootUrl() + href.attr("href");
                 String time = element.getElementsByClass("news__time").first().text();
 
-                // read news page and extract date-time and text
                 Document news = connect(newsUrl).get();
-
-                String newsDate = null;
-               try {
-                   // https://www.it-world.ru/it-news/reviews/197855.html  нет даты
-                   newsDate = news.select(".separator-line span").first().text(); //TODO
-
-               }catch (NullPointerException e){
-                   log.error("title: {} newsUrl: {}",title,newsUrl);
-                   System.out.println("s");
-               }
+                Element spanDate = news.select(".separator-line span").first();
+                if (spanDate == null) {
+                    spanDate = news.select(".color-silver span").first();
+                }
+                String newsDate = spanDate != null ? spanDate.text() : "undefined";
 
                 String description = news.select(".article__lid").text();
                 String text = description + " " + news.select(".news-detail__content").text();
@@ -67,7 +52,6 @@ public class ExecItWorld implements Execute {
         } catch (IOException e) {
             log.error(e.getMessage());
         }
-
 
         return events;
     }

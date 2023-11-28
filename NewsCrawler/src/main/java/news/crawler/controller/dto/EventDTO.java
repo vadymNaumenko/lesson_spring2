@@ -3,12 +3,10 @@ package news.crawler.controller.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import news.crawler.domin.SourceConfig;
+import news.crawler.domain.Event;
+import news.crawler.domain.SourceConfig;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Getter
 @Setter
@@ -23,6 +21,12 @@ public class EventDTO {
     private LocalDateTime dateTime;
     private String imageUrl;
     private String text;
+
+
+    public static EventDTO getInstance(Event even){
+        return new EventDTO(even.getSourceConfig(), even.getTitle(), even.getNewsUrl(),
+                even.getDateTime(), even.getImageUrl(), even.getText());
+    }
 
 
 }

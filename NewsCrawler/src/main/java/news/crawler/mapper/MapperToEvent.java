@@ -1,7 +1,7 @@
 package news.crawler.mapper;
 
 import news.crawler.controller.dto.EventDTO;
-import news.crawler.domin.Event;
+import news.crawler.domain.Event;
 import org.springframework.stereotype.Component;
 
 @Component

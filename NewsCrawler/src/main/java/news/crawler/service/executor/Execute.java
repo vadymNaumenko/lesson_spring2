@@ -1,7 +1,7 @@
-package news.crawler.service.executer;
+package news.crawler.service.executor;
 
 import news.crawler.controller.dto.EventDTO;
-import news.crawler.domin.SourceConfig;
+import news.crawler.domain.SourceConfig;
 
 import java.util.List;
 

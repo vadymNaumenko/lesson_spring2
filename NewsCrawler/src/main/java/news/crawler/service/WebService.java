@@ -1,7 +1,7 @@
 package news.crawler.service;
 
 import news.crawler.controller.dto.EventDTO;
-import news.crawler.domin.SourceConfig2;
+import news.crawler.domain.SourceConfig2;
 import org.apache.commons.lang3.time.DateUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

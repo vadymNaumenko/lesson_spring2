@@ -1,4 +1,4 @@
-package news.crawler.domin;
+package news.crawler.domain;
 
 import lombok.Getter;
 import lombok.Setter;
