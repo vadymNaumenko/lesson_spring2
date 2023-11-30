@@ -1,11 +1,13 @@
 package news.crawler.service.executor;
 
+
 import lombok.extern.slf4j.Slf4j;
 import news.crawler.controller.dto.EventDTO;
 import news.crawler.domain.SourceConfig;
 import news.crawler.repository.SourceConfigRepository;
 import news.crawler.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,10 @@ import java.util.List;
 @Slf4j
 @Service
 public class CrawlerExecutor implements SmartLifecycle {
+
+
+    @Value("${executor.time:60}")
+    private int time;
 
     @Autowired
     private SourceConfigRepository sourceConfigRepository;
@@ -50,7 +56,7 @@ public class CrawlerExecutor implements SmartLifecycle {
                 }
                 try {
 
-                    lock.wait(1000 * 10);
+                    lock.wait(1000 * 60 * time);
                 } catch (InterruptedException e) {
                     log.error(e.getMessage());
                     break;

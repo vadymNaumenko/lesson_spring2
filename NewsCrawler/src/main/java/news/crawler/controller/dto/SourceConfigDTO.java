@@ -1,13 +1,13 @@
 package news.crawler.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import news.crawler.domain.SourceConfig;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
 public class SourceConfigDTO {
 
     private Integer id;

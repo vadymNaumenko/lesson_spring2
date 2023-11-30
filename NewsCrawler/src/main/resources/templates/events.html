@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hello</title>
+</head>
+<body>
+<h2>Event List</h2>
+<tr th:each="event : ${events}">
+    <td th:utext="${event.getDateTime()}">...</td>
+    <td th:utext="${event.title}">...</td>
+</tr>
+</body>
+</html>

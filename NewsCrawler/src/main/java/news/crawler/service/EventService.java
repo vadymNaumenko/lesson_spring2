@@ -3,16 +3,19 @@ package news.crawler.service;
 import lombok.extern.slf4j.Slf4j;
 import news.crawler.controller.dto.EventDTO;
 import news.crawler.controller.dto.EventShortDTO;
+import news.crawler.controller.dto.SourceConfigDTO;
 import news.crawler.domain.Event;
 import news.crawler.domain.SourceConfig;
 import news.crawler.mapper.MapperToEvent;
 import news.crawler.repository.EventRepository;
+import news.crawler.service.executor.Execute;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,6 +63,48 @@ public class EventService {
         return eventRepository.findAllBy(pageRequest).stream()
                 .map(EventShortDTO::getInstance)
                 .collect(Collectors.toList());
+    }
+
+    public List<EventDTO> parseTest(String rootUrl, String newsSuffix, String className) {
+
+
+        Class<?> cls = null;
+        try {
+
+           cls = Class.forName("news.crawler.service.executor." + className);
+
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        Constructor<?> constructor = null;
+        try {
+
+            constructor = cls.getConstructor();
+
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
+        Execute execClass = null;
+        try {
+
+            execClass = (Execute) constructor.newInstance();
+
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+
+        return execClass.execute(new SourceConfig("http://"+rootUrl,"/"+newsSuffix+"/"));
+
+
+    }
+
+    public List<EventDTO> parseTest(SourceConfigDTO config) {
+        return parseTest(config.getRootUrl(),config.getNewsSuffix(), config.getClassName());
     }
 
 }

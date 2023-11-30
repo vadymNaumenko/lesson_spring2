@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="#1" author="Sergey">
+    <changeSet id="#1" author="Vadym">
 
         <createTable tableName="source_config">
             <column name="source_config_id" type="int" autoIncrement="true">

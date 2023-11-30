@@ -31,4 +31,10 @@ public class SourceConfig {
         ClassName = className;
         this.disabled = disabled;
     }
+
+    public SourceConfig(String rootUrl, String newsSuffix) {
+        this.rootUrl = rootUrl;
+        this.newsSuffix = newsSuffix;
+
+    }
 }

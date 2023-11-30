@@ -1,5 +1,6 @@
 package news.crawler.service;
 
+import news.crawler.controller.dto.EventDTO;
 import news.crawler.controller.dto.SourceConfigDTO;
 import news.crawler.domain.SourceConfig;
 import news.crawler.mapper.MapToSourceConfig;
@@ -26,18 +27,24 @@ public class SourceConfigService {
 
     public SourceConfigDTO update(SourceConfigDTO config) {
         SourceConfig isConfig = configRepository.findById(config.getId()).orElse(null);
+        System.out.println();
         if (isConfig != null){
             SourceConfig r = MapToSourceConfig.mapToSource(config);
             r.setId(config.getId());
             configRepository.save(r);
-            return config;
+            return SourceConfigDTO.getInstance(isConfig);
         }
 
        return null;
     }
 
     public SourceConfigDTO add(SourceConfigDTO config) {
-         configRepository.save(MapToSourceConfig.mapToSource(config));
-         return config;
+        SourceConfig save = configRepository.save(MapToSourceConfig.mapToSource(config));
+        return SourceConfigDTO.getInstance(save);
     }
+
+    public Long countEvents(){
+        return configRepository.countAll();
+    }
+
 }
