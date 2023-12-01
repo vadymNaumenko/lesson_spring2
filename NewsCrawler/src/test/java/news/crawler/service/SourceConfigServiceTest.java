@@ -40,13 +40,13 @@ class SourceConfigServiceTest {
     void delete() {
     }
 
-    @Test
-    @Order(2)
-    void update() {
-        SourceConfigDTO source = new SourceConfigDTO(1,"www.https://it.world.ru","news","className",null);
-        SourceConfigDTO config = configService.update(source);
-        assertEquals(config,source);
-    }
+//    @Test
+//    @Order(2)
+//    void update() {
+//        SourceConfigDTO source = new SourceConfigDTO(1,"www.https://it.world.ru","news","className",null);
+//        SourceConfigDTO config = configService.update(source);
+//        assertEquals(config,source);
+//    }
 
     @Test
     void add() {

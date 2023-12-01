@@ -1,6 +1,5 @@
 package news.crawler.service.executor;
 
-
 import lombok.extern.slf4j.Slf4j;
 import news.crawler.controller.dto.EventDTO;
 import news.crawler.domain.SourceConfig;
@@ -26,6 +25,7 @@ public class CrawlerExecutor implements SmartLifecycle {
     private SourceConfigRepository sourceConfigRepository;
     @Autowired
     private EventService eventService;
+    private final String PACKAGE = "news.crawler.service.executor.";
 
     private enum ThreadStatus {
         RUNNING, STOP_REQUEST, STOPPED
@@ -42,7 +42,7 @@ public class CrawlerExecutor implements SmartLifecycle {
                 for (SourceConfig config : configs) {
                     if (config.getDisabled() == null || !config.getDisabled()) {
                         try {
-                            Class<?> cls = Class.forName(config.getClassName());
+                            Class<?> cls = Class.forName(PACKAGE+config.getClassName());
                             Constructor<?> constructor = cls.getConstructor();
                             Execute execClass = (Execute) constructor.newInstance();
                             List<EventDTO> events = execClass.execute(config);
