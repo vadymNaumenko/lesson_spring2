@@ -21,7 +21,7 @@ public class EventController {
     public List<EventShortDTO> findAll() {
         return eventService.findAll();
     }
-    @GetMapping("/{title}") // mast be post method
+    @GetMapping("/{title}")
     public List<EventShortDTO> findByTitle(@PathVariable String title){
         return eventService.findAllByTitle(title);
     }

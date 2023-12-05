@@ -10,12 +10,15 @@ import news.crawler.mapper.MapperToEvent;
 import news.crawler.repository.EventRepository;
 import news.crawler.service.executor.Execute;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +49,7 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public List<EventShortDTO> findAllByTitle(String title){
+    public List<EventShortDTO> findAllByTitle(String title) {
 
         return eventRepository
                 .findAllBy(title).stream()
@@ -54,15 +57,30 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public List<EventShortDTO> findByPageable(Integer number){
+    public List<EventShortDTO> findByPageable(Integer number) {
         Sort.TypedSort<Event> sort = Sort.sort(Event.class);
         sort.by(Event::getDateTime);
 
-        PageRequest pageRequest = PageRequest.of(number,3, sort.descending());
+        PageRequest pageRequest = PageRequest.of(number, 7, sort.descending());
 
         return eventRepository.findAllBy(pageRequest).stream()
                 .map(EventShortDTO::getInstance)
                 .collect(Collectors.toList());
+    }
+
+    public Page<EventShortDTO> findByPage(Pageable pageable) {
+        Sort.TypedSort<Event> sort = Sort.sort(Event.class);
+        sort.by(Event::getDateTime);
+
+        PageRequest pageRequest;
+        if (pageable == null) {
+            pageRequest = PageRequest.of(0, 7, sort.descending());
+            return eventRepository.findAllBy(pageRequest).map(EventShortDTO::getInstance);
+        } else {
+
+            return eventRepository.findAllBy(pageable).map(EventShortDTO::getInstance);
+        }
+
     }
 
     public List<EventDTO> parseTest(String rootUrl, String newsSuffix, String className) {
@@ -71,7 +89,7 @@ public class EventService {
         Class<?> cls = null;
         try {
 
-           cls = Class.forName("news.crawler.service.executor." + className);
+            cls = Class.forName("news.crawler.service.executor." + className);
 
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -98,13 +116,15 @@ public class EventService {
             throw new RuntimeException(e);
         }
 
-        return execClass.execute(new SourceConfig("http://"+rootUrl,"/"+newsSuffix+"/"));
-
+        return execClass.execute(new SourceConfig("http://" + rootUrl, "/" + newsSuffix + "/"));
 
     }
 
     public List<EventDTO> parseTest(SourceConfigDTO config) {
-        return parseTest(config.getRootUrl(),config.getNewsSuffix(), config.getClassName());
+        return parseTest(config.getRootUrl(), config.getNewsSuffix(), config.getClassName());
     }
 
+    public EventDTO findByTitle(String title) {
+        return eventRepository.findByTitle(title).map(EventDTO::getInstance).orElse(null);
+    }
 }

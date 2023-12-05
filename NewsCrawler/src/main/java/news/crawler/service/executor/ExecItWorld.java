@@ -40,13 +40,13 @@ public class ExecItWorld implements Execute {
                     spanDate = news.select(".color-silver span").first();
                 }
                 String newsDate = spanDate != null ? spanDate.text() : "undefined";
-
+                String imageUrl = config.getRootUrl()+news.select("picture img").first().attr("src");
                 String description = news.select(".article__lid").text();
                 String text = description + " " + news.select(".news-detail__content").text();
 
                 LocalDateTime dateTime = DateTimeUtils.convertDateTime(newsDate, time);
 
-                events.add(new EventDTO(config, title, newsUrl, dateTime, null, text));
+                events.add(new EventDTO(config, title, newsUrl, dateTime, imageUrl, text));
 
             }
         } catch (IOException e) {
