@@ -8,9 +8,9 @@ import spring.service.CityService;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-@RequestMapping("/city")
+@RequestMapping("/api/city")
 public class CityController {
 
     private final CityService cityService;
@@ -25,9 +25,9 @@ public class CityController {
         return cityService.findById(id);
     }
 
-    @PutMapping("/edite/all")
-    public void editeAll(@RequestBody List<CityDTO> cityDTOS) {
-        cityService.editeAll(cityDTOS);
+    @PostMapping("/add")
+    public void add(@RequestBody CityDTO cityDTOS) {
+        cityService.save(cityDTOS);
     }
     @PutMapping("/edite")
     public void editeCity(@RequestBody CityDTO cityDTO) {
