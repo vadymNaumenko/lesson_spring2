@@ -14,4 +14,9 @@ public class ExecDevBy implements Execute{
       log.info("ExecDevBy...");
       return null;
     }
+
+    @Override
+    public List<EventDTO> readTitle(List<String> title) {
+        return null;
+    }
 }

@@ -1,17 +1,21 @@
 package news.crawler.controller;
 
+import com.google.gson.Gson;
+import io.swagger.v3.core.util.Json;
 import news.crawler.controller.dto.EventDTO;
 import news.crawler.controller.dto.EventShortDTO;
 import news.crawler.controller.dto.SourceConfigDTO;
 import news.crawler.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 @Controller
@@ -36,19 +40,19 @@ public class WebController {
     }
 
     @GetMapping("/events")
-    public String getEvents(Model model) {
-        List<EventShortDTO> events = eventService.findAll();
-        model.addAttribute("events", events);
-        return "mvc-events";
+    public String getEvents(Model model) throws IOException {
+    model.addAttribute("events",eventService.findByPageable(0));
+    return "events";
     }
 
     @GetMapping("/events/page/{number}")
     public String getEventsNumber(@PathVariable Integer number, Model model) {
         List<EventShortDTO> events;
-        if (number != null) {
+        if (number != null && number > 0) {
             events = eventService.findByPageable(number);
         } else {
-            events = eventService.findByPageable(0);
+            number = 0;
+            events = eventService.findByPageable(number);
         }
         model.addAttribute("events", events);
         model.addAttribute("page", number);

@@ -50,7 +50,7 @@ public class ExecItNovyny implements Execute {
                     String photoUrl = page.select(".content__main-image img").attr("src");
 
                     LocalDateTime localDateTime = DateTimeUtils.convertDateTime(dateTime);
-
+                    log.info("scan: {}",newsUrl);
                     events.add(new EventDTO(config, title, newsUrl, localDateTime, photoUrl, text));
 
                 }
@@ -62,5 +62,10 @@ public class ExecItNovyny implements Execute {
 
 
         return events;
+    }
+
+    @Override
+    public List<EventDTO> readTitle(List<String> title) {
+        return null;
     }
 }

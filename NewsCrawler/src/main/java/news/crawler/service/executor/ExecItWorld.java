@@ -1,12 +1,19 @@
 package news.crawler.service.executor;
 
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import news.crawler.common.DateTimeUtils;
 import news.crawler.controller.dto.EventDTO;
 import news.crawler.domain.SourceConfig;
+import news.crawler.repository.EventRepository;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 
 import java.io.IOException;
@@ -19,10 +26,10 @@ import static org.jsoup.Jsoup.connect;
 @Slf4j
 public class ExecItWorld implements Execute {
 
+
     @Override
     public List<EventDTO> execute(SourceConfig config) {
         List<EventDTO> events = new ArrayList<>();
-
         try {
             Document document = connect(config.getRootUrl() + config.getNewsSuffix()).timeout(20000 * 10).get();
 
@@ -33,6 +40,8 @@ public class ExecItWorld implements Execute {
                 String title = href.text();
                 String newsUrl = config.getRootUrl() + href.attr("href");
                 String time = element.getElementsByClass("news__time").first().text();
+
+
 
                 Document news = connect(newsUrl).get();
                 Element spanDate = news.select(".separator-line span").first();
@@ -45,6 +54,7 @@ public class ExecItWorld implements Execute {
                 String text = description + " " + news.select(".news-detail__content").text();
 
                 LocalDateTime dateTime = DateTimeUtils.convertDateTime(newsDate, time);
+                log.info("scan: {}",newsUrl);
 
                 events.add(new EventDTO(config, title, newsUrl, dateTime, imageUrl, text));
 
@@ -54,6 +64,11 @@ public class ExecItWorld implements Execute {
         }
 
         return events;
+    }
+
+    @Override
+    public List<EventDTO> readTitle(List<String> title) {
+        return null;
     }
 }
 
