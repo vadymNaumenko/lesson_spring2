@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -126,5 +127,19 @@ public class EventService {
 
     public EventDTO findByTitle(String title) {
         return eventRepository.findByTitle(title).map(EventDTO::getInstance).orElse(null);
+    }
+
+
+
+    public List<EventDTO> hasEvents(List<EventDTO> newsUrl) {
+
+        return newsUrl.stream()
+                .filter(event -> {
+                    if (eventRepository.existsByNewsUrl(event.getNewsUrl())){
+                        return false;
+                    }
+                    return true;
+                })
+                .collect(Collectors.toList());
     }
 }

@@ -2,8 +2,6 @@ package news.crawler.controller;
 
 import news.crawler.controller.dto.EventDTO;
 import news.crawler.service.EventService;
-import news.crawler.service.SourceConfigService;
-import news.crawler.service.WebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

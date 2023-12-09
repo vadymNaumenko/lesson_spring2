@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Service
+//@Service
 public class WebService {
 
     SourceConfig2 sourceConfig = new SourceConfig2();

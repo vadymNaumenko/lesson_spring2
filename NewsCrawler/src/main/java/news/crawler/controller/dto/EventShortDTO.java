@@ -2,6 +2,7 @@ package news.crawler.controller.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import news.crawler.domain.Event;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class EventShortDTO {
     private String title;
     private String newsUrl;

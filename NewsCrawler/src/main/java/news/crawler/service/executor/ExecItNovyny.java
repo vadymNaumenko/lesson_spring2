@@ -17,14 +17,6 @@ import java.util.List;
 @Slf4j
 public class ExecItNovyny implements Execute {
 
-
-    /*
-    SourceConfig
-    rootUrl: https://it.novyny.live/ru/news/
-    newsSuffix: ?page=1
-    className: news.crawler.service.executer.ExecItNovyny
-     */
-
     @Override
     public List<EventDTO> execute(SourceConfig config) {
 
@@ -32,11 +24,9 @@ public class ExecItNovyny implements Execute {
 
         Document doc = null;
 
-
         try {
 
-            doc = Jsoup.connect(config.getRootUrl()+config.getNewsSuffix()).get();
-//            doc = Jsoup.connect(config.getRootUrl()).get();
+            doc = Jsoup.connect(config.getRootUrl() + config.getNewsSuffix()).get();
 
             Elements links = doc.select(".all-news__list a");
 
@@ -50,7 +40,7 @@ public class ExecItNovyny implements Execute {
                     String photoUrl = page.select(".content__main-image img").attr("src");
 
                     LocalDateTime localDateTime = DateTimeUtils.convertDateTime(dateTime);
-                    log.info("scan: {}",newsUrl);
+                    log.info("scan: {}", newsUrl);
                     events.add(new EventDTO(config, title, newsUrl, localDateTime, photoUrl, text));
 
                 }
@@ -65,7 +55,55 @@ public class ExecItNovyny implements Execute {
     }
 
     @Override
-    public List<EventDTO> readTitle(List<String> title) {
-        return null;
+    public List<EventDTO> readNews(List<EventDTO> eventDTOS) {
+        for (int i = 0; i < eventDTOS.size(); i++) {
+
+            try {
+                Document page = Jsoup.connect(eventDTOS.get(i).getNewsUrl()).get();
+                String text = page.select(".content__wrapp p").text();
+                String dateTime = page.select(".content__info-create").text();
+                String photoUrl = page.select(".content__main-image img").attr("src");
+                LocalDateTime localDateTime = DateTimeUtils.convertDateTime(dateTime);
+
+                log.info("scan: {}", eventDTOS.get(i).getNewsUrl());
+
+                eventDTOS.get(i).setImageUrl(photoUrl);
+                eventDTOS.get(i).setDateTime(localDateTime);
+                eventDTOS.get(i).setText(text);
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+        }
+        return eventDTOS;
     }
+
+    @Override
+    public List<EventDTO> readUrl(SourceConfig config) {
+        List<EventDTO> events = new ArrayList<>();
+
+        Document doc = null;
+
+        try {
+
+            doc = Jsoup.connect(config.getRootUrl() + config.getNewsSuffix()).get();
+
+            Elements links = doc.select(".all-news__list a");
+
+            for (Element element : links) {
+                String newsUrl = element.attr("href");
+                String title = element.select("span h3").text();
+
+                if (!title.isEmpty()) {
+                    events.add(new EventDTO(null, title, newsUrl, null, null, null));
+                }
+            }
+
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
+
+        return events;
+    }
+
+
 }

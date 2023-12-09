@@ -16,7 +16,13 @@ public class ExecDevBy implements Execute{
     }
 
     @Override
-    public List<EventDTO> readTitle(List<String> title) {
+    public List<EventDTO> readNews(List<EventDTO> eventDTOS) {
         return null;
     }
+
+    @Override
+    public List<EventDTO> readUrl(SourceConfig sourceConfig) {
+        return null;
+    }
+
 }
