@@ -1,58 +1,57 @@
 package spring.config;
 
-import io.jsonwebtoken.*;
-import org.springframework.security.core.AuthenticationException;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtParserBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import spring.domain.User;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.naming.AuthenticationException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtUtil {
-
-    private final String SECRET_KEY = "secretkey";
+    private final String SECRET_KEY = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
     private final int TOKEN_VALIDITY_TIME = 10; // in min
 
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
-    private final JwtParser jwtParser;
-
-    public JwtUtil() {
-        this.jwtParser = Jwts.parser().setSigningKey(SECRET_KEY);
-    }
-
     public String createToken(User user) {
-        // мы получаем логин пользователя
-        Claims claims = Jwts.claims().setSubject(user.getLogin());
-        //claims.put("authorities", user.getAuthorities());
-        // берем текущую дату
+        Claims claims = Jwts.claims()
+                .add("authorities", user.getAuthorities())
+                .build();
         Date tokenCreateTime = new Date();
-        // к этой дате прибавляем 10 минут
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(TOKEN_VALIDITY_TIME));
-        // создаем токен
         return Jwts.builder()
-                .setClaims(claims) // в него кладем логин
-                .setExpiration(tokenValidity) // кладем дату, когда он перестанет быть валидным
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY) // подписываем его
+                .setClaims(claims)
+                .setSubject(user.getLogin())
+                .setExpiration(tokenValidity)
+                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
 
-    public Claims resolveClaims(HttpServletRequest req) {
+    public Claims resolveClaims(HttpServletRequest request) {
         try {
-            String token = resolveToken(req);
+            String token = resolveToken(request);
             if (token != null) {
-                return jwtParser.parseClaimsJws(token).getBody();
+                return Jwts.parser()
+                        .setSigningKey(SECRET_KEY)
+                        .build()
+                        .parseClaimsJws(token)
+                        .getBody();
             }
             return null;
-        } catch (ExpiredJwtException ex) {
-            req.setAttribute("expired", ex.getMessage());
-            throw ex;
-        } catch (Exception ex) {
-            req.setAttribute("invalid", ex.getMessage());
-            throw ex;
+        } catch (ExpiredJwtException e) {
+            request.setAttribute("expired", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            request.setAttribute("invalid", e.getMessage());
+            throw e;
         }
     }
 

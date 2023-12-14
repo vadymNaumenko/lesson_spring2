@@ -7,14 +7,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import spring.config.JwtUtil;
-import spring.controller.dto.ErrorResponse;
-import spring.controller.dto.LoginRequest;
-import spring.controller.dto.LoginResponse;
+import spring.controller.dto.ErrorResponce;
+import spring.controller.dto.LoginReq;
+import spring.controller.dto.LoginResponce;
 import spring.domain.User;
+
+import java.util.Collection;
 
 @RestController
 public class AuthController {
@@ -23,35 +26,26 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-    JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest loginReq)  {
+    public ResponseEntity login(@RequestBody LoginReq request) {
         try {
-            // получаем объект Аутентификации
-            // AuthenticationManager идет в базу данных, достает оттуда пользователя и потом проверяет его логин и пароль
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginReq.getLogin(), loginReq.getPassword()));
-
-            // мы получили данные из базы, мы знаем, что все ок, следовательно, можем отдать пользователю токен
-            // берем login
+                    new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword()));
             String login = authentication.getName();
-            // создаем такого же пользователя, но без пароля
-            User user = new User(login, "");
-            // создаем токен для этого пользователя
+            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+            User user = new User(login, authorities);
             String token = jwtUtil.createToken(user);
-            // формируем ответ
-            LoginResponse response = new LoginResponse(login, token);
-            // отправляем клиенту JWT
-            return ResponseEntity.ok(response);
+            LoginResponce responce = new LoginResponce(login, token);
+
+            return ResponseEntity.ok(responce);
         } catch (BadCredentialsException e) {
-            // если неверный логин и пароль - возвращаем ошибку
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, "Invalid login or password");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            ErrorResponce error = new ErrorResponce(HttpStatus.BAD_REQUEST, "Invalid login or password");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         } catch (Exception e) {
-            // если какая-то другая ошибка - тоже возвращаем ошибку
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            ErrorResponce error = new ErrorResponce(HttpStatus.BAD_REQUEST, e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
 }
