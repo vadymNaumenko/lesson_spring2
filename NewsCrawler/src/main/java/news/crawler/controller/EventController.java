@@ -30,4 +30,5 @@ public class EventController {
     public List<EventShortDTO> showPage(@PathVariable Integer number){
         return eventService.findByPageable(number);
     }
+
 }

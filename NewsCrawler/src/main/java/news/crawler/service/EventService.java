@@ -3,12 +3,9 @@ package news.crawler.service;
 import lombok.extern.slf4j.Slf4j;
 import news.crawler.controller.dto.EventDTO;
 import news.crawler.controller.dto.EventShortDTO;
-import news.crawler.controller.dto.SourceConfigDTO;
 import news.crawler.domain.Event;
 import news.crawler.domain.SourceConfig;
-import news.crawler.mapper.MapperToEvent;
 import news.crawler.repository.EventRepository;
-import news.crawler.service.executor.Execute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,16 +28,19 @@ public class EventService {
     private EventRepository eventRepository;
 
     public void save(List<EventDTO> events, SourceConfig config) {
-
-        int size = eventRepository.saveAll(events.stream()
-                .filter(e -> !eventRepository.existsByNewsUrl(e.getNewsUrl()))
-                .map(MapperToEvent::mapToEvent)
-                .map(event -> {
-                    event.setSourceConfig(config);
-                    return event;
-                }).collect(Collectors.toList())).size();
-
-        log.info("{} events save succesfull", size);
+        List<Event> newEvents = new ArrayList<>(events.size());
+        for (EventDTO e : events) {
+            Event event = new Event();
+            event.setSourceConfig(config);
+            event.setTitle(e.getTitle());
+            event.setNewsUrl(e.getNewsUrl());
+            event.setImageUrl(e.getImageUrl());
+            event.setText(e.getText());
+            event.setDateTime(e.getDateTime());
+            newEvents.add(event);
+        }
+        eventRepository.saveAll(newEvents);
+        log.info("Succesfully saved {} events .", newEvents.size());
     }
 
     public List<EventShortDTO> findAll() {
@@ -84,52 +84,50 @@ public class EventService {
 
     }
 
-    public List<EventDTO> parseTest(String rootUrl, String newsSuffix, String className) {
+//    public List<EventDTO> parseTest(String rootUrl, String newsSuffix, String className) {
+//
+//
+//        Class<?> cls = null;
+//        try {
+//
+//            cls = Class.forName("news.crawler.service.executor." + className);
+//
+//        } catch (ClassNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
+//        Constructor<?> constructor = null;
+//        try {
+//
+//            constructor = cls.getConstructor();
+//
+//        } catch (NoSuchMethodException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        Execute execClass = null;
+//        try {
+//
+//            execClass = (Execute) constructor.newInstance();
+//
+//        } catch (InstantiationException e) {
+//            throw new RuntimeException(e);
+//        } catch (IllegalAccessException e) {
+//            throw new RuntimeException(e);
+//        } catch (InvocationTargetException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        return execClass.execute(new SourceConfig("http://" + rootUrl, "/" + newsSuffix + "/"));
+//
+//    }
 
-
-        Class<?> cls = null;
-        try {
-
-            cls = Class.forName("news.crawler.service.executor." + className);
-
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        Constructor<?> constructor = null;
-        try {
-
-            constructor = cls.getConstructor();
-
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        }
-
-        Execute execClass = null;
-        try {
-
-            execClass = (Execute) constructor.newInstance();
-
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
-
-        return execClass.execute(new SourceConfig("http://" + rootUrl, "/" + newsSuffix + "/"));
-
-    }
-
-    public List<EventDTO> parseTest(SourceConfigDTO config) {
-        return parseTest(config.getRootUrl(), config.getNewsSuffix(), config.getClassName());
-    }
+//    public List<EventDTO> parseTest(SourceConfigDTO config) {
+//        return parseTest(config.getRootUrl(), config.getNewsSuffix(), config.getClassName());
+//    }
 
     public EventDTO findByTitle(String title) {
         return eventRepository.findByTitle(title).map(EventDTO::getInstance).orElse(null);
     }
-
-
 
     public List<EventDTO> hasEvents(List<EventDTO> newsUrl) {
 

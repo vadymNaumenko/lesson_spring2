@@ -10,7 +10,7 @@
 <h2>Event List</h2>
 <tr th:each="event : ${events}">
     <div class="cell-list__item m-no-image" data-article-type="article">
-        <a th:href="@{'/mvc/events/'+${event.getTitle()}}">
+        <a  th:href="@{'/mvc/events/'+${event.getTitle()}}">
             <span class="cell-list__item-title" th:text="${event.getTitle()}">title</span>
             <div class="cell-list__item-info">
                 <div class="cell-info__date" th:text="${event.getDateTime()}">time</div>

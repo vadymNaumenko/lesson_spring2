@@ -10,70 +10,47 @@ import news.crawler.domain.SourceConfig;
 import java.time.LocalDateTime;
 
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class EventDTO {
-
-    private SourceConfig sourceConfig;
 
     private String title;
     private String newsUrl;
-    //    private OffsetDateTime dateTime;
-    private LocalDateTime dateTime;
     private String imageUrl;
+    private LocalDateTime dateTime;
     private String text;
 
+    private String rootUrl;
+    private String time;
 
-    public static EventDTO getInstance(Event even){
-        return new EventDTO(even.getSourceConfig(), even.getTitle(), even.getNewsUrl(),
-                even.getDateTime(), even.getImageUrl(), even.getText());
-    }
-
-    public SourceConfig getSourceConfig() {
-        return sourceConfig;
-    }
-
-    public void setSourceConfig(SourceConfig sourceConfig) {
-        this.sourceConfig = sourceConfig;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
+    public EventDTO(String title, String newsUrl) {
         this.title = title;
-    }
-
-    public String getNewsUrl() {
-        return newsUrl;
-    }
-
-    public void setNewsUrl(String newsUrl) {
         this.newsUrl = newsUrl;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public EventDTO(String title, String newsUrl, String rootUrl) {
+        this.title = title;
+        this.newsUrl = newsUrl;
+        this.rootUrl = rootUrl;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public EventDTO(String title, String newsUrl, String rootUrl, String time) {
+        this.title = title;
+        this.newsUrl = newsUrl;
+        this.rootUrl = rootUrl;
+        this.time = time;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
+    public EventDTO(String title, String newsUrl, String imageUrl, LocalDateTime dateTime, String text) {
+        this.title = title;
+        this.newsUrl = newsUrl;
         this.imageUrl = imageUrl;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
+        this.dateTime = dateTime;
         this.text = text;
+    }
+
+    public static EventDTO getInstance(Event event) {
+        return new EventDTO(event.getTitle(), event.getNewsUrl(),
+                event.getImageUrl(), event.getDateTime(), event.getText());
     }
 }

@@ -49,8 +49,9 @@ public class CrawlerExecutor implements SmartLifecycle {
 
                             List<EventDTO> newsUrl = null;
                             newsUrl = execClass.readUrl(config); //TODO return list urls
+                            log.info("total newsUrl: {}", newsUrl.size());
                             newsUrl = eventService.hasEvents(newsUrl);
-                            System.out.println();
+
                             List<EventDTO> events = execClass.readNews(newsUrl);
 
                             log.info("Read {} events from {}", events.size(), config.getRootUrl());

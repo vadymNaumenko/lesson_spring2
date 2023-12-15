@@ -2,7 +2,7 @@ package news.crawler.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -24,7 +24,6 @@ public class Event {
 
     private String title;
     private String newsUrl;
-    //    private OffsetDateTime dateTime;
     private LocalDateTime dateTime;
     private String imageUrl;
     private String text;
