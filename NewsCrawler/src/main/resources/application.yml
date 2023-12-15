@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/news_crawler
@@ -5,5 +8,4 @@ spring:
     password: root
 
 executor:
-  time: 60
-
+  waitMin: 30

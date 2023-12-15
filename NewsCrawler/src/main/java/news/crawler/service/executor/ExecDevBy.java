@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class ExecDevBy implements Execute{
+public class ExecDevBy implements Execute {
 
     @Override
     public List<EventDTO> readUrl(SourceConfig config) {

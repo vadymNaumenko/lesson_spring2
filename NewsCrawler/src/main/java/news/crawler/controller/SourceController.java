@@ -36,11 +36,7 @@ public class SourceController {
 
     @PutMapping("/delete/{id}")
     public void delete(@PathVariable Integer id){
-        SourceConfig response = configService.delete(id);
-//        if (response == null){
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(response);
+        configService.delete(id);
     }
 
 }

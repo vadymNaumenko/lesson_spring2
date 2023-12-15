@@ -18,53 +18,60 @@ import java.util.List;
 public class CrawlerExecutor implements SmartLifecycle {
 
 
-    @Value("${executor.time:60}")
-    private int time;
+    @Value("${executor.enabled:true}")
+    private boolean serviceEnabled;
+
+    @Value("${executor.waitMin:60}")
+    private int waitMin;
 
     @Autowired
     private SourceConfigRepository sourceConfigRepository;
+
     @Autowired
     private EventService eventService;
-    private final String PACKAGE = "news.crawler.service.executor.";
 
     private enum ThreadStatus {
         RUNNING, STOP_REQUEST, STOPPED
     }
+
+    public static final String PACKAGE = "news.crawler.service.executor.";
 
     private ThreadStatus status = ThreadStatus.STOPPED;
     private final Object lock = new Object();
 
     public void run() {
         synchronized (lock) {
-
             while (status == ThreadStatus.RUNNING) {
+
                 List<SourceConfig> configs = sourceConfigRepository.findAll();
                 for (SourceConfig config : configs) {
                     if (config.getDisabled() == null || !config.getDisabled()) {
-
                         try {
-                            Class<?> cls = Class.forName(PACKAGE+config.getClassName());
+                            // create parser object by name of class using reflection
+                            Class<?> cls = Class.forName(PACKAGE + config.getClassName());
                             Constructor<?> constructor = cls.getConstructor();
                             Execute execClass = (Execute) constructor.newInstance();
 
-                            List<EventDTO> newsUrl = null;
-                            newsUrl = execClass.readUrl(config); //TODO return list urls
-                            log.info("total newsUrl: {}", newsUrl.size());
-                            newsUrl = eventService.hasEvents(newsUrl);
+                            // read titles of news from web
+                            log.info("Reading from {}{}...", config.getRootUrl(), config.getNewsSuffix());
+                            List<EventDTO> events = execClass.readUrl(config);
+                            log.info("Read {} titles from {}.", events.size(), config.getRootUrl());
 
-                            List<EventDTO> events = execClass.readNews(newsUrl);
+                            // because of the filtering, only new news remains
+                            events = eventService.filterEvents(events);
+                            log.info("Define {} news as new.", events.size());
 
-                            log.info("Read {} events from {}", events.size(), config.getRootUrl());
-
+                            // read new news from web
+                            events = execClass.readNews(events);
                             eventService.save(events, config);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 }
-                try {
 
-                    lock.wait(1000 * 60 * time);
+                try {
+                    lock.wait(1000 * 60 * waitMin);
                 } catch (InterruptedException e) {
                     log.error(e.getMessage());
                     break;
@@ -72,47 +79,44 @@ public class CrawlerExecutor implements SmartLifecycle {
             }
             status = ThreadStatus.STOPPED;
             lock.notifyAll();
-
         }
     }
 
     @Override
     public void start() {
         log.info("Service starting...");
+        if (!serviceEnabled) {
+            log.info("Service is disabled.");
+            status = ThreadStatus.STOPPED;
+            return;
+        }
         status = ThreadStatus.RUNNING;
-
         new Thread(() -> {
             run();
         }).start();
-
-        log.info("Service start");
-
-
+        log.info("Service is started.");
     }
 
     @Override
     public void stop() {
-        log.info("Service stopping");
-        status = ThreadStatus.STOPPED;
+        log.info("Service stopping...");
+        status = ThreadStatus.STOP_REQUEST;
         synchronized (lock) {
             lock.notifyAll();
             while (status != ThreadStatus.STOPPED) {
                 try {
-                    lock.wait(1000 * 10);
+                    lock.wait(100);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    log.error(e.getMessage());
+                    break;
                 }
             }
         }
-        //TODO stop service
-        log.info("Service stopped.");
-
-
+        log.info("Service is stopped.");
     }
 
     @Override
     public boolean isRunning() {
-
         return status == ThreadStatus.RUNNING;
     }
 }

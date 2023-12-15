@@ -1,6 +1,5 @@
 package news.crawler.controller;
 
-import news.crawler.controller.dto.EventDTO;
 import news.crawler.controller.dto.EventShortDTO;
 import news.crawler.service.EventService;
 import org.springframework.beans.factory.annotation.Autowired;

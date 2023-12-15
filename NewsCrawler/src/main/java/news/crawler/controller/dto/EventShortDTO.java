@@ -18,8 +18,8 @@ public class EventShortDTO {
     private LocalDateTime dateTime;
     private String source;
 
-    public static EventShortDTO getInstance(Event event){
-        return new EventShortDTO(event.getTitle(), event.getNewsUrl(), event.getDateTime(),event.getSourceConfig().getRootUrl());
+    public static EventShortDTO getInstance(Event event) {
+        return new EventShortDTO(event.getTitle(), event.getNewsUrl(), event.getDateTime(), event.getSourceConfig().getRootUrl());
     }
 
 

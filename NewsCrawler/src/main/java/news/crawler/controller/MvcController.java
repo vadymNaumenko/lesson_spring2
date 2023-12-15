@@ -18,7 +18,6 @@ public class MvcController {
     @Autowired
     private EventService eventService;
 
-
     @GetMapping("/events")
     public String getEvents(Model model) throws IOException {
     model.addAttribute("events",eventService.findByPageable(0));
@@ -38,15 +37,6 @@ public class MvcController {
         model.addAttribute("page", number);
         return "mvc-events";
     }
-
-//    @GetMapping("/events/pages") // page 2 with pageable
-//    public String getEventsPage(Model model, @PathVariable Pageable pageable) {
-//        Page<EventShortDTO> events;
-//        events = eventService.findByPage(pageable);
-//        model.addAttribute("events", events);
-//
-//        return "mvc-events";
-//    }
 
     @GetMapping("/events/{title}")
     public String getEventByTitle(@PathVariable String title, Model model) {

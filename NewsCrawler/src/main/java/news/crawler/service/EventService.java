@@ -12,11 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -84,53 +80,11 @@ public class EventService {
 
     }
 
-//    public List<EventDTO> parseTest(String rootUrl, String newsSuffix, String className) {
-//
-//
-//        Class<?> cls = null;
-//        try {
-//
-//            cls = Class.forName("news.crawler.service.executor." + className);
-//
-//        } catch (ClassNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
-//        Constructor<?> constructor = null;
-//        try {
-//
-//            constructor = cls.getConstructor();
-//
-//        } catch (NoSuchMethodException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        Execute execClass = null;
-//        try {
-//
-//            execClass = (Execute) constructor.newInstance();
-//
-//        } catch (InstantiationException e) {
-//            throw new RuntimeException(e);
-//        } catch (IllegalAccessException e) {
-//            throw new RuntimeException(e);
-//        } catch (InvocationTargetException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        return execClass.execute(new SourceConfig("http://" + rootUrl, "/" + newsSuffix + "/"));
-//
-//    }
-
-//    public List<EventDTO> parseTest(SourceConfigDTO config) {
-//        return parseTest(config.getRootUrl(), config.getNewsSuffix(), config.getClassName());
-//    }
-
     public EventDTO findByTitle(String title) {
         return eventRepository.findByTitle(title).map(EventDTO::getInstance).orElse(null);
     }
 
-    public List<EventDTO> hasEvents(List<EventDTO> newsUrl) {
-
+    public List<EventDTO> filterEvents(List<EventDTO> newsUrl) {
         return newsUrl.stream()
                 .filter(event -> {
                     if (eventRepository.existsByNewsUrl(event.getNewsUrl())){
