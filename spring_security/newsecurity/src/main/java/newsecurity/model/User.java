@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @Entity
 @Builder
-@Table(name ="_user")
+@Table(name = "_user")
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -25,7 +25,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Size(min = 3, max = 30, message = "username mast be from 2 to 30 simbl")
-    @Column(nullable = false)
+    @Column(nullable = false,name = "username")
     private String username;
     @Column(nullable = false)
     private String password;
@@ -34,6 +34,11 @@ public class User implements UserDetails {
     private Integer yearOfBirth;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(nullable = false)
+
+
+    @Enumerated(value = EnumType.STRING)
+    private State state;
 
 
     @Override
@@ -51,6 +56,7 @@ public class User implements UserDetails {
         return username;
     }
 
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -58,7 +64,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !state.equals(State.BANNED);
     }
 
     @Override
@@ -68,6 +74,6 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return state.equals(State.CONFIRMED);
     }
 }

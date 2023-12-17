@@ -39,5 +39,19 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+    // coder Base64(username:password)
+//    .httpBasic(Customizer.withDefaults());
+
+    // take the data from the custom form and add it to Spring if Success redirect to "/users"
+//    .formLogin(login -> login
+//            .loginPage("/login")
+//            .defaultSuccessUrl("/users"));
+
+    //logout
+//                    .logout(logout->logout
+//            .logoutUrl("/logout")
+//            .logoutSuccessUrl("/login")
+//                        .deleteCookies("JSESSIONID"))
+
 }
 
