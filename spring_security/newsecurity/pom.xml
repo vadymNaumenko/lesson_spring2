@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.security</groupId>
-    <artifactId>newsecurity</artifactId>
+    <artifactId>security_mailSender</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>newsecurity</name>
     <description>newsecurity</description>
