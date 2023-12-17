@@ -48,7 +48,7 @@ public class AuthenticationService {
                 .build();
 
         confirmationCodeRepository.save(code);
-        templateMailSender.sendMail(user.getUsername(), "Registration", codValid);
+        templateMailSender.sendMail(user.getUsername(), "Registration","http://localhost:8080/"+ codValid); //todo mast be add baseUrl/+codValid
 // end
         var jwtToken = jwtService.generateToken(user);
 

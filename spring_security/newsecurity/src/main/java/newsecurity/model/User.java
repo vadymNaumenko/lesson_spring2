@@ -35,10 +35,10 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
     @Column(nullable = false)
-
-
     @Enumerated(value = EnumType.STRING)
     private State state;
+    @OneToMany(mappedBy = "user")
+    private List<ConfirmationCode> codes;
 
 
     @Override
