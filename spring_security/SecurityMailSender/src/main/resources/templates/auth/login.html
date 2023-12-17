@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form name="f" method="post" action="/login/forms">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <div class="mb-3">
+        <label for="username" >Username</label>
+        <input name="username" type="text" class="form-control" id="username" aria-describedby="emailHelp">
+        <div id="emailHelp" class="form-text">We'll never share your username with anyone else.</div>
+    </div>
+    <div class="mb-3">
+        <label for="password" >Password</label>
+        <input name="password" type="password" class="form-control" id="password">
+    </div>
+    <div th:if="${param.error}" style="color: red"> not found password or username</div>
+    <input type="submit" value="login">
+</form>
+</body>
+</html>

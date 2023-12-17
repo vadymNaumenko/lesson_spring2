@@ -13,7 +13,7 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Size(min = 3, max = 30, message = "username mast be from 2 to 30 simbl")
-    @Column(nullable = false)
+    @Column( nullable = false)
     private String username;
     @Min(value = 1900, message = "year mast be more 1900")
     @Column(name = "year_of_birth")

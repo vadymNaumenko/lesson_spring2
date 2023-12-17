@@ -11,28 +11,27 @@ import spring.service.AdminService;
 
 @Controller
 public class HelloSecurityController {
-    @Autowired
+@Autowired
     private AdminService adminService;
-
     @GetMapping("/hello")
-    public String helloSecurity() {
-        return "./auth/h ello";
+    public String helloSecurity(){
+        return "./auth/hello";
     }
 
     @GetMapping("/admin")
-    public String adminPage() {
+    public String adminPage(){
         return "./auth/admin";
     }
 
     @GetMapping("/showUser")
-    public Person showUser() {
+    public Person showUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
         return personDetails.getPerson();
     }
 
     @GetMapping("/admin")
-    public String admin() {
+    public String admin(){
 
         adminService.doAdminStaff();
 

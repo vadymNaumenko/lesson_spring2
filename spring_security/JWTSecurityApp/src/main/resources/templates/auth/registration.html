@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${person}">
+    <div class="mb-3">
+        <label for="username" >enter username</label>
+        <input type="text" th:field="${person.username}" id="username">
+        <div th:if="${#fields.hasErrors('username')}" th:errors="${person.username}">username error</div>
+    </div>
+    <div class="mb-3">
+        <label for="password" >enter password</label>
+        <input type="password" th:field="${person.password}" id="password">
+        <div  th:if="${#fields.hasErrors('password')}" th:errors="${person.password}"  >password error</div>
+    </div>
+    <div class="mb-3">
+        <label for="yearOfBirth" >enter year of birth</label>
+        <input  type="text" th:field="${person.yearOfBirth}"  id="yearOfBirth" >
+        <div th:if="${#fields.hasErrors('yearOfBirth')}" th:errors="${person.yearOfBirth}" >birth error</div>
+    </div>
+    <input type="submit" value="sing up">
+</form>
+</body>
+</html>

@@ -30,35 +30,23 @@ public class SecurityConfig {
         AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
-//        return http
-//                .getSharedObject(AuthenticationManagerBuilder.class)
-//                .userDetailsService(userDetailsService)
-//                .passwordEncoder(passwordEncoder)
-//                .build();
+
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        return http
-//                .authorizeHttpRequests(authUrl -> authUrl
-//                        .requestMatchers(antMatcher("/login/**"))
-//                            .permitAll()
-//                        .anyRequest()
-//                        .authenticated())
-//                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
-//                .build();
+
         return http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                    .requestMatchers("/login/**", "/noauth/**")
-                    .permitAll()
+                .requestMatchers("/login/**", "/noauth/**", "/swagger-ui/**", "/v3/**")
+                .permitAll()
                 .and()
                 .authorizeHttpRequests()
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .authorizeHttpRequests()
-                    .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest()
                 .authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

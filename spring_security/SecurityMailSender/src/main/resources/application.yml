@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    username: postgres
+    password: root
+    url: jdbc:postgresql://localhost:5432/spring_security
+  jpa:
+    hibernate:
+      ddl-auto: update
+  mail:
+    password: gqqcjkijfmvgteux
+    username: vadimnaumnaum@gmail.com
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
