@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import spring.config.JwtUtil;
-import spring.controller.dto.ErrorResponce;
-import spring.controller.dto.LoginReq;
-import spring.controller.dto.LoginResponce;
+import spring.controller.dto.ErrorResponse;
+import spring.controller.dto.LoginRequest;
+import spring.controller.dto.LoginResponse;
 import spring.domain.User;
 
 import java.util.Collection;
@@ -29,7 +29,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginReq request) {
+    public ResponseEntity login(@RequestBody LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword()));
@@ -37,14 +37,14 @@ public class AuthController {
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             User user = new User(login, authorities);
             String token = jwtUtil.createToken(user);
-            LoginResponce responce = new LoginResponce(login, token);
+            LoginResponse responce = new LoginResponse(login, token);
 
             return ResponseEntity.ok(responce);
         } catch (BadCredentialsException e) {
-            ErrorResponce error = new ErrorResponce(HttpStatus.BAD_REQUEST, "Invalid login or password");
+            ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, "Invalid login or password");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         } catch (Exception e) {
-            ErrorResponce error = new ErrorResponce(HttpStatus.BAD_REQUEST, e.getMessage());
+            ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }

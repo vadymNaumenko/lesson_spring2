@@ -10,8 +10,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>hello.security.jwt.3</groupId>
-    <artifactId>hello-security-jwt-3</artifactId>
+    <groupId>hello.security3.jwt</groupId>
+    <artifactId>hello-security3-jwt</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>HelloJWT</name>
     <description>HelloJWT Spring Security HelloWorld</description>
@@ -38,13 +38,7 @@
             <version>0.12.3</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui -->
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.7.0</version>
-        </dependency>
-
+        <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>

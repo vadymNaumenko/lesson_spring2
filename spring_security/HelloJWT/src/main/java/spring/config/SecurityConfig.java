@@ -25,17 +25,17 @@ public class SecurityConfig {
     private JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder)
-            throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-        return authenticationManagerBuilder.build();
-
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+        return http
+                .getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder)
+                .and()
+                .build();
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
         return http
                 .csrf().disable()
                 .authorizeHttpRequests()
