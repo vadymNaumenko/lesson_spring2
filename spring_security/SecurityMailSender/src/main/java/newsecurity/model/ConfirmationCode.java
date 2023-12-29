@@ -18,14 +18,13 @@ import java.time.LocalDateTime;
 public class ConfirmationCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Integer id;
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String code;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-@Column(name = "date_time")
+    @Column(name = "date_time")
     private LocalDateTime expiredDateTime;
 }
