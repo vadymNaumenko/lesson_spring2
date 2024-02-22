@@ -13,9 +13,7 @@ import java.util.Optional;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Integer> {
     boolean existsByNewsUrl(String newsUrl);
-
     Page<Event> findAllBy(Pageable pageable);
-
     @Query("select e from Event e where e.title like %:title%")
     List<Event> findAllBy(String title);
 

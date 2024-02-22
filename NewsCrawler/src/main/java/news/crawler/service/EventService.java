@@ -36,7 +36,7 @@ public class EventService {
             newEvents.add(event);
         }
         eventRepository.saveAll(newEvents);
-        log.info("Succesfully saved {} events .", newEvents.size());
+        log.info("saved {} events .", newEvents.size());
     }
 
     public List<EventShortDTO> findAll() {
@@ -58,7 +58,7 @@ public class EventService {
         Sort.TypedSort<Event> sort = Sort.sort(Event.class);
         sort.by(Event::getDateTime);
 
-        PageRequest pageRequest = PageRequest.of(number, 7, sort.descending());
+      PageRequest pageRequest = PageRequest.of(number, 7, sort.descending());
 
         return eventRepository.findAllBy(pageRequest).stream()
                 .map(EventShortDTO::getInstance)
