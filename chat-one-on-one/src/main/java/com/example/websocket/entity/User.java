@@ -1,4 +1,4 @@
-package com.example.websocket.user;
+package com.example.websocket.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +24,7 @@ public class User {
         }
     }
     public enum Status {
-        ONLINE, OF_LINE
+        ONLINE, OFFLINE
     }
 
     @Id
