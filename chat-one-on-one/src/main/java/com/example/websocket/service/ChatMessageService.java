@@ -5,6 +5,9 @@ import com.example.websocket.repository.ChatMessageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ChatMessageService {
@@ -22,5 +25,16 @@ public class ChatMessageService {
         return chatMessage;
     }
 
+    public List<ChatMessage> findChatMessage(
+            Long senderId,
+            Long recipientId
+    ){
+        var chatId = chatRoomService.getChatRoomId(
+                senderId,
+                recipientId,
+                false
+        );
+        return chatId.map(repository::findByChatId).orElse(new ArrayList<>());
+    }
 
 }
