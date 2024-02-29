@@ -1,5 +1,6 @@
 package com.example.websocket.controller;
 
+import com.example.websocket.dto.ChatNotificationDTO;
 import com.example.websocket.entity.ChatMessage;
 import com.example.websocket.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,16 @@ public class ChatController {
         ChatMessage savedMessage = chatMessageService.save(chatMessage);
         // id/queue/message
         // 5/queue/message
-        messagingTemplate.convertAndSendToUser(String.valueOf(chatMessage.getRecipientId()),"/queue/message",null);
+        messagingTemplate.convertAndSendToUser(
+                String.valueOf(chatMessage.getRecipientId()),
+                "/queue/message",
+                ChatNotificationDTO.builder()
+                        .id(savedMessage.getId())
+                        .senderId(savedMessage.getSenderId())
+                        .recipientId(savedMessage.getRecipientId())
+                        .content(savedMessage.getContent())
+                        .build()
+        );
 
     }
     @GetMapping("/messages/{senderId}/{recipientId}")
