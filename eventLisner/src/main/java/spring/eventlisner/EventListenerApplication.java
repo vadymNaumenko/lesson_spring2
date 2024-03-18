@@ -18,7 +18,7 @@ public class EventListenerApplication {
 //        context.refresh();
 //
 //        EventEntity event = context.getBean("eventEntity",EventEntity.class);
-        System.out.println(event);
+//        System.out.println(event);
 
 
     }

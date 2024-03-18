@@ -14,7 +14,7 @@ public class UserRepository {
 
     private ArrayList<User> pool = new ArrayList();
     @PreDestroy
-    public void created(){
+    private void created(){
         User user = User.builder()
                 .userId(7)
                 .name("Roma")
