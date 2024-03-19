@@ -20,6 +20,7 @@ public class UserRepository {
                 .name("Roma")
                 .build();
         pool.add(user);
+        System.out.println("start preDestroy");
     }
 
     public User save(User user){
