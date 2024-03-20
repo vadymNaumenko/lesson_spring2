@@ -20,4 +20,5 @@ public class ConfigBean {
         user.setUserId(2);
         return new User();
     }
+
 }
