@@ -1,5 +1,6 @@
 package spring.eventlisner.entity;
 
+import jakarta.persistence.Entity;
 import lombok.*;
 
 @Getter
@@ -8,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Entity
 public class User {
     private int userId;
     private String name;
