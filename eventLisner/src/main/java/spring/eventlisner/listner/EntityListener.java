@@ -9,7 +9,7 @@ import spring.eventlisner.entity.User;
 public class EntityListener {
 
     @EventListener
-    public void acceptEntity(User event){
+    public void acceptEntity(EventEntity<User> event){
         System.out.println("entity " + event);
     }
 }
