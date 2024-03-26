@@ -1,4 +1,4 @@
-package spring.eventlisner.entity;
+package spring.eventlisner.listner;
 
 public enum AccessType {
     CREATED,UPDATE,READ,DELETE
