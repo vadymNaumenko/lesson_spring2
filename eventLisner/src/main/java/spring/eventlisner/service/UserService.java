@@ -17,12 +17,10 @@ public class UserService {
     private final UserRepository userRepository;
 //    private final EventRepository eventRepository;
     private final ApplicationEventPublisher event;
-    private static int item = 0;
 
     public User create(String name) {
 
         User newUser = userRepository.save(User.builder()
-                .userId(item++)
                 .name(name)
                 .build());
 

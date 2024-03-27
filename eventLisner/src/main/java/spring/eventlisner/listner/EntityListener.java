@@ -15,7 +15,7 @@ public class EntityListener {
     private final UserEventRepository userEventRepository;
 
 //    @EventListener
-//    public void cdeateEntity(EventEntity<User> event) {
+//    public void createEntity(EventEntity<User> event) {
 //        String name = "";
 //        if (event.getSource() instanceof User) {
 //            name = ((User) event.getSource()).getName();
