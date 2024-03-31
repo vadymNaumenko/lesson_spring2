@@ -42,6 +42,8 @@ public class Main {
         //ROUND_DOWN — отбрасывание разряда
         round.setScale(3, RoundingMode.DOWN); // = 111.555
 
+        //ROUND_HALF_UP — округление в большую сторону, если число после запятой >= .5
+        BigDecimal.valueOf(0.55).setScale(1,RoundingMode.HALF_UP);// = 0.6
 
          }
 }
