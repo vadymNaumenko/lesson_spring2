@@ -44,6 +44,8 @@ public class Main {
 
         //ROUND_HALF_UP — округление в большую сторону, если число после запятой >= .5
         BigDecimal.valueOf(0.55).setScale(1,RoundingMode.HALF_UP);// = 0.6
+        BigDecimal.valueOf(0.54).setScale(1,RoundingMode.HALF_UP);// = 0.5
+
 
          }
 }
