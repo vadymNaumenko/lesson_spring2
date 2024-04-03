@@ -58,6 +58,11 @@ public class Main {
         BigDecimal.valueOf(3.5).setScale(0,RoundingMode.HALF_EVEN);// = 4
         //Цифра слева от запятой - 3 - нечетная. Округление происходит вверх. Поскольку нам требуется 0 знаков после запятой, результатом будет 4.
 
+        //ROUND_UNNECCESSARY — используется в тех случаях, когда в какой-то метод нужно передать режим округления, но число в округлении не нуждается.
+        //Если попробовать произвести округление числа при выставленном режиме ROUND_UNNECCESSARY — выброшено исключение ArithmeticException.
+        BigDecimal.valueOf(3.51).setScale(0,RoundingMode.UNNECESSARY);// = ArithmeticException
+
+
 
          }
 }
