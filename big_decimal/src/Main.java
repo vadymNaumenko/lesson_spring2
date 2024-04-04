@@ -60,7 +60,10 @@ public class Main {
 
         //ROUND_UNNECCESSARY — используется в тех случаях, когда в какой-то метод нужно передать режим округления, но число в округлении не нуждается.
         //Если попробовать произвести округление числа при выставленном режиме ROUND_UNNECCESSARY — выброшено исключение ArithmeticException.
-        BigDecimal.valueOf(3.51).setScale(0,RoundingMode.UNNECESSARY);// = ArithmeticException
+        BigDecimal.valueOf(3.51).setScale(1,RoundingMode.UNNECESSARY);// = ArithmeticException
+
+        //ROUND_UP — округление в большую сторону.
+        BigDecimal.valueOf(111.5551).setScale(3,RoundingMode.UP);// = 111.556
 
 
 
