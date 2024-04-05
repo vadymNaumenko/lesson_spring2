@@ -65,6 +65,11 @@ public class Main {
         //ROUND_UP — округление в большую сторону.
         BigDecimal.valueOf(111.5551).setScale(3,RoundingMode.UP);// = 111.556
 
+        //Сравнение больших чисел
+        BigDecimal x = new BigDecimal("1.5");
+        BigDecimal y = new BigDecimal("1.50");
+
+        System.out.println(x.compareTo(y));
 
 
          }
