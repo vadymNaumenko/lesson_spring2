@@ -13,5 +13,8 @@ public class CacheController {
     public String getData(){
         return cacheService.getData();
     }
-
+    @GetMapping("/update")
+    public String update(){
+        return cacheService.update();
+    }
 }

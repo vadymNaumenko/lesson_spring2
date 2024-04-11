@@ -1,6 +1,7 @@
 package cache_spring;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +14,10 @@ public class CacheService {
     public String getData(){
         return dao.getData();
     }
-    public String deleteData(){
-    return "delete";
+
+    @CachePut(cacheNames = "data")
+    public String update(){
+    return dao.getData();
     }
 
 
