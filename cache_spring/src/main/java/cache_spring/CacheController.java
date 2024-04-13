@@ -17,4 +17,8 @@ public class CacheController {
     public String update(){
         return cacheService.update();
     }
+    @GetMapping("/evict")
+    public void evict(){
+        cacheService.evict();
+    }
 }
