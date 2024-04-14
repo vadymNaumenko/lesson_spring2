@@ -11,9 +11,9 @@ import java.util.List;
 public class Dao {
 
     @SneakyThrows
-    public String getData() {
+    public String getData(String lastName) {
         Thread.sleep(2000);
-        List<String> str = Files.readAllLines(Path.of("src/main/resources/ivanov.txt"));
+        List<String> str = Files.readAllLines(Path.of("src/main/resources/"+lastName+".txt"));
         return String.join(" ", str);
     }
 
