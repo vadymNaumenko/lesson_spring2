@@ -22,4 +22,8 @@ public class CacheController {
     public void evict(){
         cacheService.evict();
     }
+    @GetMapping("/manual")
+    public String getManualData(@RequestParam String lastName){
+        return cacheService.getManualData(lastName);
+    }
 }
