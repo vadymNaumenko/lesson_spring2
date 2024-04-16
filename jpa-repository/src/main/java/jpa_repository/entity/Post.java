@@ -1,15 +1,12 @@
 package jpa_repository.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Data
+@ToString(exclude = "locales")
+@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Post {
@@ -18,4 +15,6 @@ public class Post {
     private Integer id;
     private String title;
     private String description;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Locales locales;
 }
