@@ -1,6 +1,8 @@
 package jpa_repository.repository;
 
 import jpa_repository.entity.Post;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +22,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
            " where p.title like %:title% and p.description like %:description%")
     List<Post> findAllBy(String title, String description);
 
-    @Modifying(clearAutomatically = true,flushAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Post p " +
            "set p.title = :title " +
            "where p.id in (:ids)")
@@ -29,4 +31,10 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query("select p from Post p" +
            " join fetch p.locales pl where p.title = :title")
     Optional<Post> findByTitle2(String title);
+
+   Optional<Post> findTopByOrderByIdDesc();
+   List<Post> findTop3ByTitleBeforeOrderByIdDesc(String title);
+   List<Post> findTop3ByTitleBefore(String title, Sort sort);
+   List<Post> findTop3(Pageable pageable);
+
 }
