@@ -22,4 +22,7 @@ public class User {
     private String LastName;
 
     private UserRole role;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Company company;
 }
