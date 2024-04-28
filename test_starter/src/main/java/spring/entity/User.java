@@ -21,6 +21,7 @@ public class User {
     private String firstName;
     private String LastName;
 
+    @Enumerated(value = EnumType.STRING)
     private UserRole role;
 
     @ManyToOne(fetch = FetchType.LAZY)
