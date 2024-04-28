@@ -1,4 +1,4 @@
-package spring.integration;
+package spring.integration.service;
 
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -21,12 +21,11 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@IT
 @RequiredArgsConstructor
 //@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 //@ExtendWith(SpringExtension.class)
 //@ContextConfiguration(classes = ApplicationRunner.class,initializers = ConfigDataApplicationContextInitializer.class)
-public class CompanyServiceIT {
+public class CompanyServiceIT extends IntegrationTestBase{
 
     private final CompanyService companyService;
     @Test

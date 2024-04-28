@@ -1,5 +1,12 @@
+#spring:
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/event_listener
+#    username: root
+#    password: root
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/event_listener
-    username: root
-    password: root
+    username: test
+    password: test
+  jpa:
+    properties.hibernate:
+        hbm2ddl.auto: update
