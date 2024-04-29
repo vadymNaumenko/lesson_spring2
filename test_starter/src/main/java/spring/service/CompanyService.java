@@ -15,4 +15,7 @@ public class CompanyService {
                 .orElseThrow(()-> new IllegalArgumentException("company with id: "+id+" not found"));
     }
 
+    public Company create(String name) {
+        return companyRepository.save(new Company(name));
+    }
 }

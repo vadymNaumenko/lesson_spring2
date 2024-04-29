@@ -22,10 +22,14 @@ public class Company {
     private Integer id;
     private String name;
 
-    @Builder.Default
-    @ElementCollection
-    @CollectionTable(name = "company_locales", joinColumns = @JoinColumn(name = "company_id"))
-    @MapKeyColumn(name = "lang")
-    @Column(name = "description")
-    private Map<String, String> locales = new HashMap<>();
+//    @Builder.Default
+//    @ElementCollection
+//    @CollectionTable(name = "company_locales", joinColumns = @JoinColumn(name = "company_id"))
+//    @MapKeyColumn(name = "lang")
+//    @Column(name = "description")
+//    private Map<String, String> locales = new HashMap<>();
+
+    public Company(String name) {
+      this.name =  name;
+    }
 }

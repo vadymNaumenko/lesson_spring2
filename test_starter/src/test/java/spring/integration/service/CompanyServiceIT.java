@@ -30,9 +30,13 @@ public class CompanyServiceIT extends IntegrationTestBase{
     private final CompanyService companyService;
     @Test
     void findById() {
-//        Company result = companyService.findById(1);
-        assertTrue(true);
-//        assertEquals(1,result.getId());
-
+        Company result = companyService.findById(1);
+        assertEquals("Google",result.getName());
+    }
+    @Test
+    void create(){
+      Company company =  companyService.create("Marvel");
+      Company company2 =  companyService.create("Marvel");
+        System.out.println();
     }
 }
