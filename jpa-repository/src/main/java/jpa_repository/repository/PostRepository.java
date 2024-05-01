@@ -35,6 +35,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
    Optional<Post> findTopByOrderByIdDesc();
    List<Post> findTop3ByTitleBeforeOrderByIdDesc(String title);
    List<Post> findTop3ByTitleBefore(String title, Sort sort);
-   List<Post> findTop3(Pageable pageable);
+//   List<Post> findTop3(Pageable pageable);
 
 }

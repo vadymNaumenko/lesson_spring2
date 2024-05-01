@@ -14,7 +14,7 @@ public class PostService {
     private final PostRepository postRepository;
 
     public Post findById(Integer id){
-        return postRepository.findById(id).orElseThrow();
+        return postRepository.findById(id).orElse(null);
     }
 
     public void findTopAndSort(){
@@ -25,6 +25,6 @@ public class PostService {
     }
     public void findByPageable(){
         PageRequest pageRequest = PageRequest.of(1, 2, Sort.by("id"));
-        postRepository.findTop3(pageRequest);
+//        postRepository.findTop3(pageRequest);
     }
 }
