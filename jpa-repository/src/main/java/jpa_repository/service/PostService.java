@@ -7,6 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -26,5 +28,9 @@ public class PostService {
     public void findByPageable(){
         PageRequest pageRequest = PageRequest.of(1, 2, Sort.by("id"));
 //        postRepository.findTop3(pageRequest);
+    }
+
+    public List<Post> findTop3ByTitleBefore(String lol, Sort descending) {
+        return postRepository.findTop3ByTitleBefore("Google", Sort.by("title"));
     }
 }

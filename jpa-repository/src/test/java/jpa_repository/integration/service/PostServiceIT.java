@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import java.util.List;
+
 @IT
 @RequiredArgsConstructor
 public class PostServiceIT {
@@ -26,10 +28,12 @@ public class PostServiceIT {
 
     @Test
     public void findTopAndSort() {
-//        Sort.TypedSort<Post> typedSort = Sort.sort(Post.class);
-//        Sort sortAnd = typedSort.by(Post::getId).and(typedSort.by(Post::getTitle));
-//        Sort sortById = Sort.by("id");
-//        postRepository.findTop3ByTitleBefore("lol",sortById.descending());
+        Sort.TypedSort<Post> typedSort = Sort.sort(Post.class);
+        Sort sortAnd = typedSort.by(Post::getId).and(typedSort.by(Post::getTitle));
+
+        List<Post> posts = postService.findTop3ByTitleBefore("lol",sortAnd.descending());
+        assertFalse(posts.isEmpty());
+
     }
 
     @Test
