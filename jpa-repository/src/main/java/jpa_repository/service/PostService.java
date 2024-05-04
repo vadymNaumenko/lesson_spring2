@@ -23,14 +23,14 @@ public class PostService {
         Sort.TypedSort<Post> typedSort = Sort.sort(Post.class);
         Sort sortAnd = typedSort.by(Post::getId).and(typedSort.by(Post::getTitle));
         Sort sortById = Sort.by("id");
-        postRepository.findTop3ByTitleBefore("lol",sortById.descending());
+        postRepository.findTop2ByTitleBefore("lol",sortById.descending());
     }
     public void findByPageable(){
         PageRequest pageRequest = PageRequest.of(1, 2, Sort.by("id"));
 //        postRepository.findTop3(pageRequest);
     }
 
-    public List<Post> findTop3ByTitleBefore(String lol, Sort descending) {
-        return postRepository.findTop3ByTitleBefore("Google", Sort.by("title"));
+    public List<Post> findTop3ByTitleBefore(String title, Sort descending) {
+        return postRepository.findTop2ByTitleBefore(title, Sort.by("title"));
     }
 }

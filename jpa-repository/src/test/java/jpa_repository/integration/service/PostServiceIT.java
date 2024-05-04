@@ -31,7 +31,7 @@ public class PostServiceIT {
         Sort.TypedSort<Post> typedSort = Sort.sort(Post.class);
         Sort sortAnd = typedSort.by(Post::getId).and(typedSort.by(Post::getTitle));
 
-        List<Post> posts = postService.findTop3ByTitleBefore("lol",sortAnd.descending());
+        List<Post> posts = postService.findTop3ByTitleBefore("путин",sortAnd.descending());
         assertFalse(posts.isEmpty());
 
     }

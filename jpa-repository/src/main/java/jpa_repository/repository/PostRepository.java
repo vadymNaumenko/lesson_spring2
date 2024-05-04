@@ -1,7 +1,6 @@
 package jpa_repository.repository;
 
 import jpa_repository.entity.Post;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -34,7 +33,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
    Optional<Post> findTopByOrderByIdDesc();
    List<Post> findTop3ByTitleBeforeOrderByIdDesc(String title);
-   List<Post> findTop3ByTitleBefore(String title, Sort sort);
+   List<Post> findTop2ByTitleBefore(String title, Sort sort);
 //   List<Post> findTop3(Pageable pageable);
 
 }
