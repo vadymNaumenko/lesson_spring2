@@ -1,8 +1,12 @@
-INSERT INTO locales (id,country)
-value (1,'USA'),(2,'UA'),(3,'DE'),(4,'FE'),(5,'PL'),(6,'RU');
+INSERT INTO company (name)
+VALUES ('Google'),
+       ('Meta'),
+       ('Amazon');
 
-INSERT INTO post (description, title, locales_id)
-VALUE('Путин начел полномаштабное вторжение в Украину после того как осознал что...','Почему Путин решылся розвезать войну',6 ),
-('Украина получит военую помощь от...','Результаты встречи Зеленського',2 ),
-('Путин отдал часть расийской земю китайцам в оренду на 70 лет с возможностю выкупа','Cделка с Китаел',6 ),
-('ТЦК похищает людей прямо на улице. В одесе четверо..','Похищения людей',2 )
+INSERT INTO company_locales (company_id, lang, description)
+VALUES ((SELECT id FROM company WHERE name = 'Google'), 'en', 'Google description'),
+       ((SELECT id FROM company WHERE name = 'Google'), 'ru', 'Google описание'),
+       ((SELECT id FROM company WHERE name = 'Meta'), 'en', 'Meta description'),
+       ((SELECT id FROM company WHERE name = 'Meta'), 'ru', 'Meta описание'),
+       ((SELECT id FROM company WHERE name = 'Amazon'), 'en', 'Amazon description'),
+       ((SELECT id FROM company WHERE name = 'Amazon'), 'ru', 'Amazon описание');
