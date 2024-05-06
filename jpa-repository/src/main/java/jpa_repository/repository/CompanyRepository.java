@@ -12,28 +12,28 @@ import java.util.Optional;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
-    @Query("select p from Company p where p.title = :title")
-    Optional<Company> findByTitle(String title);
+//    @Query("select p from Company p where p.title = :title")
+    Optional<Company> findByName(String name);
 
-    List<Company> findAllByTitleContainingAndDescriptionContaining(String title, String description);
+//    List<Company> findAllByTitleContainingAndDescriptionContaining(String title, String description);
 
-    @Query("select p from Company p" +
-           " where p.title like %:title% and p.description like %:description%")
-    List<Company> findAllBy(String title, String description);
+//    @Query("select p from Company p" +
+//           " where p.name like %:name% and p.description like %:description%")
+//    List<Company> findAllBy(String name, String description);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("update Company p " +
-           "set p.title = :title " +
+           "set p.name = :name " +
            "where p.id in (:ids)")
-    int updateLocation(String title, Integer... ids);
+    int updateLocation(String name, Integer... ids);
 
     @Query("select p from Company p" +
-           " join fetch p.locales pl where p.title = :title")
-    Optional<Company> findByTitle2(String title);
+           " join fetch p.locales pl where p.name = :name")
+    Optional<Company> findByTitle2(String name);
 
    Optional<Company> findTopByOrderByIdDesc();
-   List<Company> findTop3ByTitleBeforeOrderByIdDesc(String title);
-   List<Company> findTop2ByTitleBefore(String title, Sort sort);
+   List<Company> findTop3ByNameBeforeOrderByIdDesc(String title);
+   List<Company> findTop2ByNameBefore(String title, Sort sort);
 //   List<Post> findTop3(Pageable pageable);
 
 }

@@ -7,42 +7,38 @@ import jpa_repository.entity.Company;
 import jpa_repository.service.CompanyService;
 import lombok.RequiredArgsConstructor;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Map;
 
 @IT
 @RequiredArgsConstructor
 public class CompanyServiceIT {
 
-    private final CompanyService postService;
+    private final CompanyService companyService;
     private final EntityManager entityManager;
 
     @Test
-    public void findById() {
-        Company actual = postService.findById(1);
-
-        Company post = entityManager.find(Company.class, 1);
-        assertNotNull(post);
-        assertNotNull(actual);
-        assertEquals(1, actual.getId());
+    void findById() {
+        var company = entityManager.find(Company.class, 1);
+        assertNotNull(company);
+        assertThat(company.getLocales()).hasSize(2);
     }
 
     @Test
-    public void findTopAndSort() {
-        Sort.TypedSort<Company> typedSort = Sort.sort(Company.class);
-        Sort sortAnd = typedSort.by(Company::getId).and(typedSort.by(Company::getTitle));
-
-        List<Company> posts = postService.findTop3ByTitleBefore("путин",sortAnd.descending());
-        assertFalse(posts.isEmpty());
-
-    }
-
-    @Test
-    public void findByPageable() {
-//        PageRequest pageRequest = PageRequest.of(1, 2, Sort.by("id"));
-//        postRepository.findTop3(pageRequest);
+    void save() {
+        var company = Company.builder()
+                .name("Apple1")
+                .locales(Map.of(
+                        "ru", "Apple описание",
+                        "en", "Apple description"
+                ))
+                .build();
+        entityManager.persist(company);
+        assertNotNull(company.getId());
     }
 }
