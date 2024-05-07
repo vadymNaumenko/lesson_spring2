@@ -11,12 +11,18 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 
 @IT
 @RequiredArgsConstructor
+@Transactional
+//@Rollback
+//@Commit
 public class CompanyServiceIT {
 
     private final CompanyService companyService;
@@ -32,7 +38,7 @@ public class CompanyServiceIT {
     @Test
     void save() {
         var company = Company.builder()
-                .name("Apple1")
+                .name("Apple")
                 .locales(Map.of(
                         "ru", "Apple описание",
                         "en", "Apple description"
