@@ -14,25 +14,29 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.Map;
 
 @IT
 @RequiredArgsConstructor
-@Transactional
-//@Rollback
-//@Commit
 public class CompanyServiceIT {
 
     private final CompanyService companyService;
     private final EntityManager entityManager;
+    private final TransactionTemplate transactionTemplate;
 
     @Test
+//    @Transactional
+//    @Rollback
+//    @Commit
     void findById() {
-        var company = entityManager.find(Company.class, 1);
-        assertNotNull(company);
-        assertThat(company.getLocales()).hasSize(2);
+        transactionTemplate.executeWithoutResult(tx -> {
+            var company = entityManager.find(Company.class, 1);
+            assertNotNull(company);
+            assertThat(company.getLocales()).hasSize(2);
+        });
     }
 
     @Test

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class CompanyService {
 
     private final CompanyRepository companyRepository;
 
-
+    @Transactional
     public Optional<CompanyReadDTO> findById(Integer id) {
         return companyRepository.findById(id)
                 .map(company -> new CompanyReadDTO(company.getId()));
