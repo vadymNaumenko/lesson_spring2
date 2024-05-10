@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -27,6 +28,12 @@ public class CompanyRepositoryIT {
     private static final Integer COMPANY_APPLE_ID = 4;
 
 
+    @Test
+    void checkFindByQueries(){
+        Optional<Company> google = companyRepository.findByName("Google");
+        List<Company> companies = companyRepository.findByNameContainingIgnoreCase("a");
+        System.out.println("google");
+    }
     @Test
     @Order(2)
     @Commit

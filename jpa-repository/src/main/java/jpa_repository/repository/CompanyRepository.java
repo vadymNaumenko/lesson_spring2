@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
 //    @Query("select p from Company p where p.title = :title")
     Optional<Company> findByName(String name);
+    List<Company> findByNameContainingIgnoreCase(String name);
 
 //    List<Company> findAllByTitleContainingAndDescriptionContaining(String title, String description);
 
