@@ -5,6 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
 //    @Query("select p from Company p where p.title = :title")
-    Optional<Company> findByName(String name);
+    Optional<Company> findByName(@Param("name") String name);
     List<Company> findByNameContainingIgnoreCase(String name);
 
 //    List<Company> findAllByTitleContainingAndDescriptionContaining(String title, String description);

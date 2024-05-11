@@ -5,7 +5,8 @@ import lombok.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@NamedQuery(name = "company.findByName",
+query = "select c from Company c where lower(c.name) = lower(:name)")
 @Entity
 @Data
 @ToString(exclude = "locales")

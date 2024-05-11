@@ -30,7 +30,7 @@ public class CompanyRepositoryIT {
 
     @Test
     void checkFindByQueries(){
-        Optional<Company> google = companyRepository.findByName("Google");
+        Optional<Company> google = companyRepository.findByName("google");
         List<Company> companies = companyRepository.findByNameContainingIgnoreCase("a");
         System.out.println("google");
     }
