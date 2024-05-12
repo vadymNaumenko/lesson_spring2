@@ -13,8 +13,13 @@ import java.util.Optional;
 
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Integer> {
-//    @Query("select p from Company p where p.title = :title")
-    Optional<Company> findByName(@Param("name") String name);
+
+//    @Query(name = "company.findByName")
+//    Optional<Company> findByName(@Param("name") String name); NamedQuery
+
+//    @Query("select c from Company c join fetch c.locales cl where c.name = :name")
+    @Query("select c from Company c where c.name = :name")
+    Optional<Company> findByName(String name);
     List<Company> findByNameContainingIgnoreCase(String name);
 
 //    List<Company> findAllByTitleContainingAndDescriptionContaining(String title, String description);
