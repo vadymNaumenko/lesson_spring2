@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @EqualsAndHashCode(of = "username")
+@ToString(exclude = "company")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
