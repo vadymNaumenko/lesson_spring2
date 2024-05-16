@@ -2,7 +2,9 @@ package jpa_repository.repository;
 
 import jpa_repository.entity.Role;
 import jpa_repository.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -33,6 +35,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findTopByOrderByIdDesc();
 
     List<User> findTop3ByBirthDateBeforeOrderByBirthDateDesc(LocalDate birthDate);
+
     List<User> findTop3ByBirthDateBefore(LocalDate birthDate, Sort sort);
-    List<User> findAllBy(Pageable pageable);
+
+    //can return
+    // java - Collection, Stream
+    //spring - Streamable, Slice, Page
+    //todo List<User> findAllBy(Pageable pageable);
+    //todo    Slice<User> findAllBy(Pageable pageable);
+    @Query(value = "select u from User u",
+    countQuery = "select count(distinct u.firstname) from User u") //переопредиления  каунтера
+    Page<User> findAllBy(Pageable pageable);
 }
