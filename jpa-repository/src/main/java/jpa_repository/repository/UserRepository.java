@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -43,7 +44,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //spring - Streamable, Slice, Page
     //todo List<User> findAllBy(Pageable pageable);
     //todo    Slice<User> findAllBy(Pageable pageable);
-    @Query(value = "select u from User u",
-    countQuery = "select count(distinct u.firstname) from User u") //переопредиления  каунтера
+
+//    @EntityGraph(value = "User.company")
+    @EntityGraph(attributePaths = {"company","company.locales"})
+//    @Query(value = "select u from User u join fetch u.company c",
+//            countQuery = "select count(distinct u.firstname) from User u")  todo join and fetch
+    @Query(value = "select u from User u join fetch u.company c",
+            countQuery = "select count(distinct u.firstname) from User u")
+        //переопредиления  каунтера
     Page<User> findAllBy(Pageable pageable);
 }

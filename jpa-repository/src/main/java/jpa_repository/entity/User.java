@@ -5,6 +5,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+@NamedEntityGraph(
+        name = "User.company",
+        attributeNodes = @NamedAttributeNode("company"))
 @Data
 @EqualsAndHashCode(of = "username")
 @ToString(exclude = "company")
