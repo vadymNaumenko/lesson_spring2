@@ -1,6 +1,8 @@
 package jpa_repository.integration.repository;
 
 import jpa_repository.annotation.IT;
+import jpa_repository.dto.PersonalInfo;
+import jpa_repository.dto.PersonalInfo2;
 import jpa_repository.entity.Role;
 import jpa_repository.entity.User;
 import jpa_repository.repository.UserRepository;
@@ -23,6 +25,13 @@ import java.util.Optional;
 public class UserRepositoryIT {
 
     private final UserRepository userRepository;
+
+    @Test
+    void checkProjections(){
+//        List<PersonalInfo> users = userRepository.findAllByCompanyId(1, PersonalInfo.class);
+        List<PersonalInfo2> users = userRepository.findAllByCompanyId(1);
+        assertThat(users).hasSize(2);
+    }
 
     @Test
     void checkPageable(){
