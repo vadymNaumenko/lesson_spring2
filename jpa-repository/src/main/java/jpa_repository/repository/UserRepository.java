@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, FilterUserRepository {
 
     //    List<User> findAllByFirstnameContainingAndLastnameContaining(String firstname,String lastname);
     @Query("select u from User u where u.firstname like %:firstname% and u.lastname like %:lastname%")

@@ -3,6 +3,7 @@ package jpa_repository.integration.repository;
 import jpa_repository.annotation.IT;
 import jpa_repository.dto.PersonalInfo;
 import jpa_repository.dto.PersonalInfo2;
+import jpa_repository.dto.UserFilter;
 import jpa_repository.entity.Role;
 import jpa_repository.entity.User;
 import jpa_repository.repository.UserRepository;
@@ -25,6 +26,15 @@ import java.util.Optional;
 public class UserRepositoryIT {
 
     private final UserRepository userRepository;
+
+    @Test
+    void checkCustomImplRepository(){
+        UserFilter filter = new UserFilter(
+                null, "%ov%", LocalDate.now()
+        );
+        List<User> allByFilter = userRepository.findAllByFilter(filter);
+        System.out.println();
+    }
 
     @Test
     void checkProjections(){
