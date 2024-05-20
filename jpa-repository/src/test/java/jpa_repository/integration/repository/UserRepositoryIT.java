@@ -28,6 +28,14 @@ public class UserRepositoryIT {
     private final UserRepository userRepository;
 
     @Test
+    void checkAuditing(){
+        User ivan = userRepository.findById(1L).get();
+        ivan.setBirthDate(ivan.getBirthDate().plusYears(1L));
+        userRepository.flush();
+        System.out.println();
+    }
+
+    @Test
     void checkCustomImplRepository(){
         UserFilter filter = new UserFilter(
                 null, "%ov%", LocalDate.now()
