@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -18,7 +19,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long>, FilterUserRepository {
+public interface UserRepository extends
+        JpaRepository<User, Long>,
+        FilterUserRepository,
+        RevisionRepository<User,Long,Integer> {
 
     //    List<User> findAllByFirstnameContainingAndLastnameContaining(String firstname,String lastname);
     @Query("select u from User u where u.firstname like %:firstname% and u.lastname like %:lastname%")

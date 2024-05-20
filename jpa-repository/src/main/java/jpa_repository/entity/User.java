@@ -2,8 +2,13 @@ package jpa_repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.envers.RelationTargetAuditMode;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NamedEntityGraph(
         name = "User.company",
@@ -16,7 +21,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Table(name = "users")
-public class User extends AuditingEntity{
+@Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
+public class User extends AuditingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,4 +42,7 @@ public class User extends AuditingEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
+
+//    @NotAudited
+//    private List<Company> companies = new ArrayList<>();
 }

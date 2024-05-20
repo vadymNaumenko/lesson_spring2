@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.history.Revision;
+import org.springframework.data.history.Revisions;
+import org.springframework.test.annotation.Commit;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +31,13 @@ public class UserRepositoryIT {
     private final UserRepository userRepository;
 
     @Test
+    void checkRevision(){
+        Optional<Revision<Integer, User>> lastChangeRevision = userRepository.findLastChangeRevision(1L);
+        Revisions<Integer, User> revisions = userRepository.findRevisions(1L);
+        System.out.println();
+    }
+    @Test
+    @Commit
     void checkAuditing(){
         User ivan = userRepository.findById(1L).get();
         ivan.setBirthDate(ivan.getBirthDate().plusYears(1L));
