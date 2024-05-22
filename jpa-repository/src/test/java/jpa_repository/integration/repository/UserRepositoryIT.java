@@ -31,6 +31,12 @@ public class UserRepositoryIT {
     private final UserRepository userRepository;
 
     @Test
+    void checkJdbcTemplate(){
+        List<PersonalInfo> allByCompanyIdAndRole = userRepository.findAllByCompanyIdAndRole(1, Role.USER);
+        System.out.println();
+    }
+
+    @Test
     void checkRevision(){
         Optional<Revision<Integer, User>> lastChangeRevision = userRepository.findLastChangeRevision(1L);
         Revisions<Integer, User> revisions = userRepository.findRevisions(1L);
